@@ -1,0 +1,20 @@
+<resources>
+    <string name="app_name">NewJUST</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_update">更新课表</string>
+    <string name="action_edit">编辑课程</string>
+    <string name="action_background">设置背景</string>
+
+    <string name="menu_group_1">校园应用</string>
+    <string name="menu_group_2">设置</string>
+
+    <string name="item_theme">主题</string>
+    <string name="item_setting">设置</string>
+    <string name="item_library">馆藏查询</string>
+    <string name="item_grade">成绩查询</string>
+
+
+</resources>

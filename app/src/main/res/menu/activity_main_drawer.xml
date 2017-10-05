@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:title="@string/menu_group_1">
+
+        <menu android:checkableBehavior="single">
+            <item
+                android:id="@+id/nav_grade"
+                android:icon="@drawable/ic_menu_grade"
+                android:title="@string/item_grade" />
+            <item
+                android:id="@+id/nav_library"
+                android:icon="@drawable/ic_menu_library"
+                android:title="@string/item_library" />
+        </menu>
+
+    </item>
+
+
+    <item android:title="@string/menu_group_2">
+        <menu>
+            <item
+                android:id="@+id/nav_setting"
+                android:icon="@drawable/ic_menu_setting"
+                android:title="@string/item_setting" />
+            <item
+                android:id="@+id/nav_theme"
+                android:icon="@drawable/ic_menu_theme"
+                android:title="@string/item_theme" />
+        </menu>
+    </item>
+
+</menu>
