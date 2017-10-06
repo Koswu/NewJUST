@@ -1,8 +1,10 @@
 package com.example.lyy.newjust;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.RequiresApi;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -27,16 +29,16 @@ public class MainActivity extends AppCompatActivity
 
     private Toolbar toolbar;
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             WindowManager.LayoutParams localLayoutParams = getWindow().getAttributes();
             localLayoutParams.flags = (WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS | localLayoutParams.flags);
         }
-
-        setContentView(R.layout.activity_main);
 
         init();
 
@@ -45,9 +47,13 @@ public class MainActivity extends AppCompatActivity
     private void init() {
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         SharedPreferences preferences = getSharedPreferences("theme", MODE_PRIVATE);
+
         int color = preferences.getInt("color", 0);
+
         Log.d(TAG, "init: " + color);
-        toolbar.setBackgroundColor(getResources().getColor(color));
+        if (color != 0) {
+            toolbar.setBackgroundColor(getResources().getColor(color));
+        }
 
         setSupportActionBar(toolbar);
 
@@ -108,7 +114,8 @@ public class MainActivity extends AppCompatActivity
 
         switch (item.getItemId()) {
             case R.id.nav_grade:
-                Toast.makeText(MainActivity.this, "你点击了成绩查询按钮", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(MainActivity.this, ScoreActivity.class);
+                startActivity(intent);
                 break;
             case R.id.nav_library:
                 Toast.makeText(MainActivity.this, "你点击了馆藏查询按钮", Toast.LENGTH_SHORT).show();
