@@ -23,9 +23,9 @@ import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
 
-public class ScoreActivity extends AppCompatActivity {
+public class SubjectActivity extends AppCompatActivity {
 
-    private static final String TAG = "ScoreActivity";
+    private static final String TAG = "SubjectActivity";
 
 //    private ListView listView;
 //
@@ -42,7 +42,7 @@ public class ScoreActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_score);
+        setContentView(R.layout.activity_subject);
 
         searchScoreRequest();
 
