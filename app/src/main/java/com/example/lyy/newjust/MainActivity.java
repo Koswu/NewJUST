@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.NavigationView;
@@ -23,15 +24,26 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.example.lyy.newjust.util.HttpUtil;
+
+import java.io.IOException;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.Response;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private static final String TAG = "MainActivity";
 
+    private String headPicUrl;
+
     private Toolbar toolbar;
+
+    private ImageView head_image_view;
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -49,8 +61,31 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void init() {
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
         SharedPreferences preferences = getSharedPreferences("theme", MODE_PRIVATE);
+
+        CollapsingToolbarLayout collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
+        collapsingToolbarLayout.setTitle("New JUST");
+
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+
+        head_image_view = (ImageView) findViewById(R.id.head_image_view);
+
+        headPicUrl = preferences.getString("head_pic", null);
+        if (headPicUrl != null) {
+            Glide.with(this).load(headPicUrl).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(head_image_view);
+        } else {
+            loadHeadPic();
+        }
+
+        head_image_view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this, HeadImageActivity.class);
+                intent.putExtra("headPicUrl", headPicUrl);
+                startActivity(intent);
+            }
+        });
+
 
         int color = preferences.getInt("color", 0);
 
@@ -70,78 +105,6 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        CollapsingToolbarLayout collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
-
-        collapsingToolbarLayout.setTitle("New JUST");
-
-        ImageView head_image_view = (ImageView) findViewById(R.id.head_image_view);
-        Glide.with(this).load(R.drawable.head_image).into(head_image_view);
-
-    }
-
-
-    @Override
-    public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
-        } else {
-            super.onBackPressed();
-        }
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-
-        switch (item.getItemId()) {
-            case R.id.action_update:
-                Toast.makeText(MainActivity.this, "你点击了更新课表按钮", Toast.LENGTH_SHORT).show();
-                break;
-            case R.id.action_edit:
-                Toast.makeText(MainActivity.this, "你点击了编辑课程按钮", Toast.LENGTH_SHORT).show();
-                break;
-            case R.id.action_background:
-                Toast.makeText(MainActivity.this, "你点击了更换背景按钮", Toast.LENGTH_SHORT).show();
-                break;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
-    @SuppressWarnings("StatementWithEmptyBody")
-    @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
-
-        switch (item.getItemId()) {
-            case R.id.nav_grade:
-                Intent intent = new Intent(MainActivity.this, SubjectActivity.class);
-                startActivity(intent);
-                break;
-            case R.id.nav_library:
-                Toast.makeText(MainActivity.this, "你点击了馆藏查询按钮", Toast.LENGTH_SHORT).show();
-                break;
-            case R.id.nav_setting:
-                Toast.makeText(MainActivity.this, "你点击了设置按钮", Toast.LENGTH_SHORT).show();
-                break;
-            case R.id.nav_theme:
-                showChooseThemeDialog();
-                break;
-        }
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
-        return true;
     }
 
     private void showChooseThemeDialog() {
@@ -253,6 +216,97 @@ public class MainActivity extends AppCompatActivity
         });
 
     }
+
+    //加载首页
+    private void loadHeadPic() {
+        String requestHeadPic = "http://120.25.88.41/img";
+        HttpUtil.sendHttpRequest(requestHeadPic, new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                final String headPic = response.body().string();
+                SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(MainActivity.this).edit();
+                editor.putString("head_pic", headPic);
+                headPicUrl = headPic;
+                editor.apply();
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Glide.with(MainActivity.this).load(headPic).diskCacheStrategy(DiskCacheStrategy.ALL).into(head_image_view);
+                    }
+                });
+            }
+        });
+    }
+
+    @Override
+    public void onBackPressed() {
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+
+        switch (item.getItemId()) {
+            case R.id.action_update:
+                Toast.makeText(MainActivity.this, "你点击了更新课表按钮", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.action_edit:
+                Toast.makeText(MainActivity.this, "你点击了编辑课程按钮", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.action_background:
+                Toast.makeText(MainActivity.this, "你点击了更换背景按钮", Toast.LENGTH_SHORT).show();
+                break;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    @SuppressWarnings("StatementWithEmptyBody")
+    @Override
+    public boolean onNavigationItemSelected(MenuItem item) {
+        // Handle navigation view item clicks here.
+
+        switch (item.getItemId()) {
+            case R.id.nav_grade:
+                Intent intent = new Intent(MainActivity.this, SubjectActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.nav_library:
+                Toast.makeText(MainActivity.this, "你点击了馆藏查询按钮", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.nav_setting:
+                Toast.makeText(MainActivity.this, "你点击了设置按钮", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.nav_theme:
+                showChooseThemeDialog();
+                break;
+        }
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
+        return true;
+    }
+
 
     @Override
     protected void onResume() {

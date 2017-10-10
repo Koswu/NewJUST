@@ -27,15 +27,6 @@ public class SubjectActivity extends AppCompatActivity {
 
     private static final String TAG = "SubjectActivity";
 
-//    private ListView listView;
-//
-//    private ArrayAdapter<String> adapter;
-//
-//    private List<String> dataList = new ArrayList<>();
-//
-//    private List<Subjects> subjectsList;
-
-    private String course_name, credit, examination_method, score, start_semester;
 
     private TextView textView;
 
@@ -56,12 +47,6 @@ public class SubjectActivity extends AppCompatActivity {
                 queryDataFromDB();
             }
         });
-
-//        listView = (ListView) findViewById(R.id.list_view);
-//        adapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_list_item_1, dataList);
-//        listView.setAdapter(adapter);
-
-
     }
 
     //发出分数查询的请求
