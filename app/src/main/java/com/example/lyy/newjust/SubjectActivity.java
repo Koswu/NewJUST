@@ -61,7 +61,7 @@ public class SubjectActivity extends AppCompatActivity {
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-                final String responseText = response.body().string();
+                String responseText = response.body().string();
                 parseJSONToDB(responseText);
             }
         });

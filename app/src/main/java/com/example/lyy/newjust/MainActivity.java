@@ -6,6 +6,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.RequiresApi;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -25,7 +26,9 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.example.lyy.newjust.gson.Weather;
 import com.example.lyy.newjust.util.HttpUtil;
+import com.example.lyy.newjust.util.Utility;
 
 import java.io.IOException;
 
@@ -41,7 +44,8 @@ public class MainActivity extends AppCompatActivity
 
     private String headPicUrl;
 
-    private Toolbar toolbar;
+    private AppBarLayout appbarlayout;
+    private CollapsingToolbarLayout collapsingToolbarLayout;
 
     private ImageView head_image_view;
 
@@ -63,10 +67,11 @@ public class MainActivity extends AppCompatActivity
     private void init() {
         SharedPreferences preferences = getSharedPreferences("theme", MODE_PRIVATE);
 
-        CollapsingToolbarLayout collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
+        collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
         collapsingToolbarLayout.setTitle("New JUST");
 
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 
         head_image_view = (ImageView) findViewById(R.id.head_image_view);
 
@@ -74,7 +79,7 @@ public class MainActivity extends AppCompatActivity
         if (headPicUrl != null) {
             Glide.with(this).load(headPicUrl).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(head_image_view);
         } else {
-            loadHeadPic();
+            //loadHeadPic();
         }
 
         head_image_view.setOnClickListener(new View.OnClickListener() {
@@ -86,12 +91,13 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
-
         int color = preferences.getInt("color", 0);
+
+        appbarlayout = (AppBarLayout) findViewById(R.id.appBar);
 
         Log.d(TAG, "init: " + color);
         if (color != 0) {
-            toolbar.setBackgroundColor(getResources().getColor(color));
+            appbarlayout.setBackgroundColor(getResources().getColor(color));
         }
 
         setSupportActionBar(toolbar);
@@ -104,6 +110,39 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        requestWeather();
+
+    }
+
+    //发送查询天气的请求
+    private void requestWeather() {
+        String weatherUrl = "http://guolin.tech/api/weather?cityid=CN101190301&key=38c845e8310644ee83a8a7bba9b9be64";
+        HttpUtil.sendHttpRequest(weatherUrl, new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                String responseText = response.body().string();
+                Log.d(TAG, "onResponse: " + responseText);
+                Weather weather = Utility.handleWeatherResponse(responseText);
+                parseWeatherData(weather);
+            }
+        });
+    }
+
+    private void parseWeatherData(Weather weather) {
+        final String degree = weather.now.temperature + "℃";
+        final String weatherInfo = weather.now.more.info;
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                collapsingToolbarLayout.setTitle(degree + " " + weatherInfo);
+            }
+        });
 
     }
 
@@ -133,7 +172,8 @@ public class MainActivity extends AppCompatActivity
         green.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                toolbar.setBackgroundColor(getResources().getColor(R.color.material_green_200));
+                appbarlayout.setBackgroundColor(getResources().getColor(R.color.material_green_200));
+                collapsingToolbarLayout.setContentScrimColor(getResources().getColor(R.color.material_green_200));
                 SharedPreferences.Editor editor = getSharedPreferences("theme", MODE_PRIVATE).edit();
                 editor.putInt("color", R.color.material_green_200);
                 editor.apply();
@@ -145,7 +185,8 @@ public class MainActivity extends AppCompatActivity
         grey.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                toolbar.setBackgroundColor(getResources().getColor(R.color.material_blue_grey_500));
+                appbarlayout.setBackgroundColor(getResources().getColor(R.color.material_blue_grey_500));
+                collapsingToolbarLayout.setContentScrimColor(getResources().getColor(R.color.material_blue_grey_500));
                 SharedPreferences.Editor editor = getSharedPreferences("theme", MODE_PRIVATE).edit();
                 editor.putInt("color", R.color.material_blue_grey_500);
                 editor.apply();
@@ -157,7 +198,8 @@ public class MainActivity extends AppCompatActivity
         white.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                toolbar.setBackgroundColor(getResources().getColor(R.color.material_white_1000));
+                appbarlayout.setBackgroundColor(getResources().getColor(R.color.material_white_1000));
+                collapsingToolbarLayout.setContentScrimColor(getResources().getColor(R.color.material_white_1000));
                 SharedPreferences.Editor editor = getSharedPreferences("theme", MODE_PRIVATE).edit();
                 editor.putInt("color", R.color.material_white_1000);
                 editor.apply();
@@ -169,7 +211,8 @@ public class MainActivity extends AppCompatActivity
         orange.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                toolbar.setBackgroundColor(getResources().getColor(R.color.material_deep_orange_400));
+                appbarlayout.setBackgroundColor(getResources().getColor(R.color.material_deep_orange_400));
+                collapsingToolbarLayout.setContentScrimColor(getResources().getColor(R.color.material_deep_orange_400));
                 SharedPreferences.Editor editor = getSharedPreferences("theme", MODE_PRIVATE).edit();
                 editor.putInt("color", R.color.material_deep_orange_400);
                 editor.apply();
@@ -181,7 +224,8 @@ public class MainActivity extends AppCompatActivity
         purple.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                toolbar.setBackgroundColor(getResources().getColor(R.color.material_deep_purple_A200));
+                appbarlayout.setBackgroundColor(getResources().getColor(R.color.material_deep_purple_A200));
+                collapsingToolbarLayout.setContentScrimColor(getResources().getColor(R.color.material_deep_purple_A200));
                 SharedPreferences.Editor editor = getSharedPreferences("theme", MODE_PRIVATE).edit();
                 editor.putInt("color", R.color.material_deep_purple_A200);
                 Log.d(TAG, "onClick: " + R.color.material_deep_purple_A200);
@@ -194,7 +238,8 @@ public class MainActivity extends AppCompatActivity
         red.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                toolbar.setBackgroundColor(getResources().getColor(R.color.material_red_400));
+                appbarlayout.setBackgroundColor(getResources().getColor(R.color.material_red_400));
+                collapsingToolbarLayout.setContentScrimColor(getResources().getColor(R.color.material_red_400));
                 SharedPreferences.Editor editor = getSharedPreferences("theme", MODE_PRIVATE).edit();
                 editor.putInt("color", R.color.material_red_400);
                 editor.apply();
@@ -206,7 +251,8 @@ public class MainActivity extends AppCompatActivity
         blue.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                toolbar.setBackgroundColor(getResources().getColor(R.color.material_blue_400));
+                appbarlayout.setBackgroundColor(getResources().getColor(R.color.material_blue_400));
+                collapsingToolbarLayout.setContentScrimColor(getResources().getColor(R.color.material_blue_400));
                 SharedPreferences.Editor editor = getSharedPreferences("theme", MODE_PRIVATE).edit();
                 editor.putInt("color", R.color.material_blue_400);
                 editor.apply();
@@ -217,7 +263,7 @@ public class MainActivity extends AppCompatActivity
 
     }
 
-    //加载首页
+    //发送加载首页图片的请求
     private void loadHeadPic() {
         String requestHeadPic = "http://120.25.88.41/img";
         HttpUtil.sendHttpRequest(requestHeadPic, new Callback() {
@@ -236,7 +282,7 @@ public class MainActivity extends AppCompatActivity
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Glide.with(MainActivity.this).load(headPic).diskCacheStrategy(DiskCacheStrategy.ALL).into(head_image_view);
+                        Glide.with(MainActivity.this).load(R.drawable.head_image).into(head_image_view);
                     }
                 });
             }
@@ -269,6 +315,7 @@ public class MainActivity extends AppCompatActivity
         switch (item.getItemId()) {
             case R.id.action_update:
                 Toast.makeText(MainActivity.this, "你点击了更新课表按钮", Toast.LENGTH_SHORT).show();
+
                 break;
             case R.id.action_edit:
                 Toast.makeText(MainActivity.this, "你点击了编辑课程按钮", Toast.LENGTH_SHORT).show();
