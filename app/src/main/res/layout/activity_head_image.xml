@@ -14,18 +14,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center"
-        android:fitsSystemWindows="true" />
-
-
-    <ImageView
-        android:id="@+id/download_imageView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="right|bottom"
-        android:layout_marginBottom="8dp"
-        android:layout_marginRight="8dp"
-        android:background="@android:color/transparent"
         android:clickable="true"
-        app:srcCompat="@mipmap/ic_btn_download" />
+        android:fitsSystemWindows="true" />
 
 </FrameLayout>
