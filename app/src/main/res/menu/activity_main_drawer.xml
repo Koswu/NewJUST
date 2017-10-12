@@ -12,6 +12,14 @@
                 android:id="@+id/nav_library"
                 android:icon="@drawable/ic_menu_library"
                 android:title="@string/item_library" />
+            <item
+                android:id="@+id/nav_classroom"
+                android:icon="@drawable/ic_menu_classroom"
+                android:title="@string/item_classroom" />
+            <item
+                android:id="@+id/nav_myday"
+                android:icon="@drawable/ic_menu_myday"
+                android:title="@string/item_myday" />
         </menu>
 
     </item>

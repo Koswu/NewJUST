@@ -44,10 +44,12 @@ public class MainActivity extends AppCompatActivity
 
     private String headPicUrl;
 
-    private AppBarLayout appbarlayout;
     private CollapsingToolbarLayout collapsingToolbarLayout;
 
     private ImageView head_image_view;
+
+    private SharedPreferences sharedPreferences;
+    private SharedPreferences.Editor editor;
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -65,21 +67,22 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void init() {
-        SharedPreferences preferences = getSharedPreferences("theme", MODE_PRIVATE);
 
+        //设置和toolbar相关的
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
         collapsingToolbarLayout.setTitle("New JUST");
 
-
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-
+        //设置顶部照片
         head_image_view = (ImageView) findViewById(R.id.head_image_view);
 
-        headPicUrl = preferences.getString("head_pic", null);
+        //设置有关存储信息的
+        sharedPreferences=getSharedPreferences("data",MODE_PRIVATE);
+        headPicUrl = sharedPreferences.getString("head_pic", null);
         if (headPicUrl != null) {
             Glide.with(this).load(headPicUrl).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(head_image_view);
         } else {
-            //loadHeadPic();
+            loadHeadPic();
         }
 
         head_image_view.setOnClickListener(new View.OnClickListener() {
@@ -90,15 +93,6 @@ public class MainActivity extends AppCompatActivity
                 startActivity(intent);
             }
         });
-
-        int color = preferences.getInt("color", 0);
-
-        appbarlayout = (AppBarLayout) findViewById(R.id.appBar);
-
-        Log.d(TAG, "init: " + color);
-        if (color != 0) {
-            appbarlayout.setBackgroundColor(getResources().getColor(color));
-        }
 
         setSupportActionBar(toolbar);
 
@@ -146,126 +140,9 @@ public class MainActivity extends AppCompatActivity
 
     }
 
-    private void showChooseThemeDialog() {
-        /* @setView 装入自定义View ==> R.layout.dialog_customize
-     * dialog_customize.xml可自定义更复杂的View
-     */
-
-        final AlertDialog.Builder customizeDialog =
-                new AlertDialog.Builder(this);
-        LayoutInflater inflater = LayoutInflater.from(this);
-        View view = inflater.inflate(R.layout.dialog_customize, null);
-        customizeDialog.setTitle("选择主题色");
-        customizeDialog.setView(view);
-        customizeDialog.setCancelable(true);
-
-        final AlertDialog dialog = customizeDialog.show();
-        CircleImageView green = view.findViewById(R.id.green);
-        CircleImageView white = view.findViewById(R.id.white);
-        CircleImageView purple = view.findViewById(R.id.purple);
-        CircleImageView red = view.findViewById(R.id.red);
-        CircleImageView blue = view.findViewById(R.id.blue);
-        CircleImageView orange = view.findViewById(R.id.orange);
-        CircleImageView grey = view.findViewById(R.id.grey);
-
-
-        green.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                appbarlayout.setBackgroundColor(getResources().getColor(R.color.material_green_200));
-                collapsingToolbarLayout.setContentScrimColor(getResources().getColor(R.color.material_green_200));
-                SharedPreferences.Editor editor = getSharedPreferences("theme", MODE_PRIVATE).edit();
-                editor.putInt("color", R.color.material_green_200);
-                editor.apply();
-                Toast.makeText(getApplicationContext(), "你选择了绿色", Toast.LENGTH_SHORT).show();
-                dialog.dismiss();
-            }
-        });
-
-        grey.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                appbarlayout.setBackgroundColor(getResources().getColor(R.color.material_blue_grey_500));
-                collapsingToolbarLayout.setContentScrimColor(getResources().getColor(R.color.material_blue_grey_500));
-                SharedPreferences.Editor editor = getSharedPreferences("theme", MODE_PRIVATE).edit();
-                editor.putInt("color", R.color.material_blue_grey_500);
-                editor.apply();
-                Toast.makeText(getApplicationContext(), "你选择了灰色", Toast.LENGTH_SHORT).show();
-                dialog.dismiss();
-            }
-        });
-
-        white.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                appbarlayout.setBackgroundColor(getResources().getColor(R.color.material_white_1000));
-                collapsingToolbarLayout.setContentScrimColor(getResources().getColor(R.color.material_white_1000));
-                SharedPreferences.Editor editor = getSharedPreferences("theme", MODE_PRIVATE).edit();
-                editor.putInt("color", R.color.material_white_1000);
-                editor.apply();
-                Toast.makeText(getApplicationContext(), "你选择了白色", Toast.LENGTH_SHORT).show();
-                dialog.dismiss();
-            }
-        });
-
-        orange.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                appbarlayout.setBackgroundColor(getResources().getColor(R.color.material_deep_orange_400));
-                collapsingToolbarLayout.setContentScrimColor(getResources().getColor(R.color.material_deep_orange_400));
-                SharedPreferences.Editor editor = getSharedPreferences("theme", MODE_PRIVATE).edit();
-                editor.putInt("color", R.color.material_deep_orange_400);
-                editor.apply();
-                Toast.makeText(getApplicationContext(), "你选择了橘色", Toast.LENGTH_SHORT).show();
-                dialog.dismiss();
-            }
-        });
-
-        purple.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                appbarlayout.setBackgroundColor(getResources().getColor(R.color.material_deep_purple_A200));
-                collapsingToolbarLayout.setContentScrimColor(getResources().getColor(R.color.material_deep_purple_A200));
-                SharedPreferences.Editor editor = getSharedPreferences("theme", MODE_PRIVATE).edit();
-                editor.putInt("color", R.color.material_deep_purple_A200);
-                Log.d(TAG, "onClick: " + R.color.material_deep_purple_A200);
-                editor.apply();
-                Toast.makeText(getApplicationContext(), "你选择了紫色", Toast.LENGTH_SHORT).show();
-                dialog.dismiss();
-            }
-        });
-
-        red.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                appbarlayout.setBackgroundColor(getResources().getColor(R.color.material_red_400));
-                collapsingToolbarLayout.setContentScrimColor(getResources().getColor(R.color.material_red_400));
-                SharedPreferences.Editor editor = getSharedPreferences("theme", MODE_PRIVATE).edit();
-                editor.putInt("color", R.color.material_red_400);
-                editor.apply();
-                Toast.makeText(getApplicationContext(), "你选择了红色", Toast.LENGTH_SHORT).show();
-                dialog.dismiss();
-            }
-        });
-
-        blue.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                appbarlayout.setBackgroundColor(getResources().getColor(R.color.material_blue_400));
-                collapsingToolbarLayout.setContentScrimColor(getResources().getColor(R.color.material_blue_400));
-                SharedPreferences.Editor editor = getSharedPreferences("theme", MODE_PRIVATE).edit();
-                editor.putInt("color", R.color.material_blue_400);
-                editor.apply();
-                Toast.makeText(getApplicationContext(), "你选择了蓝色", Toast.LENGTH_SHORT).show();
-                dialog.dismiss();
-            }
-        });
-
-    }
-
     //发送加载首页图片的请求
     private void loadHeadPic() {
-        String requestHeadPic = "http://120.25.88.41/img";
+        String requestHeadPic = "http://120.25.88.41:8088/img";
         HttpUtil.sendHttpRequest(requestHeadPic, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
@@ -275,14 +152,14 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 final String headPic = response.body().string();
-                SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(MainActivity.this).edit();
+                editor = getSharedPreferences("data", MODE_PRIVATE).edit();
                 editor.putString("head_pic", headPic);
                 headPicUrl = headPic;
                 editor.apply();
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Glide.with(MainActivity.this).load(R.drawable.head_image).into(head_image_view);
+                        Glide.with(MainActivity.this).load(headPicUrl).into(head_image_view);
                     }
                 });
             }
@@ -313,15 +190,17 @@ public class MainActivity extends AppCompatActivity
         // as you specify a parent activity in AndroidManifest.xml.
 
         switch (item.getItemId()) {
+            case R.id.action_about:
+                Toast.makeText(MainActivity.this, "你点击了关于我们按钮", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.action_donate:
+                Toast.makeText(MainActivity.this, "你点击了支持捐赠按钮", Toast.LENGTH_SHORT).show();
+                break;
             case R.id.action_update:
-                Toast.makeText(MainActivity.this, "你点击了更新课表按钮", Toast.LENGTH_SHORT).show();
-
-                break;
-            case R.id.action_edit:
-                Toast.makeText(MainActivity.this, "你点击了编辑课程按钮", Toast.LENGTH_SHORT).show();
-                break;
-            case R.id.action_background:
                 Toast.makeText(MainActivity.this, "你点击了更换背景按钮", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.action_exit:
+                this.finish();
                 break;
         }
 
@@ -344,8 +223,11 @@ public class MainActivity extends AppCompatActivity
             case R.id.nav_setting:
                 Toast.makeText(MainActivity.this, "你点击了设置按钮", Toast.LENGTH_SHORT).show();
                 break;
+            case R.id.nav_classroom:
+                Toast.makeText(MainActivity.this, "你点击了查询空教室按钮", Toast.LENGTH_SHORT).show();
+                break;
             case R.id.nav_theme:
-                showChooseThemeDialog();
+                Toast.makeText(MainActivity.this, "你点击了更换皮肤按钮", Toast.LENGTH_SHORT).show();
                 break;
         }
 

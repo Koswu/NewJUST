@@ -7,13 +7,18 @@
         android:title="@string/action_update"
         app:showAsAction="never" />
     <item
-        android:id="@+id/action_edit"
+        android:id="@+id/action_donate"
         android:orderInCategory="100"
-        android:title="@string/action_edit"
+        android:title="@string/action_donate"
         app:showAsAction="never" />
     <item
-        android:id="@+id/action_background"
+        android:id="@+id/action_about"
         android:orderInCategory="100"
-        android:title="@string/action_background"
+        android:title="@string/action_about"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_exit"
+        android:orderInCategory="100"
+        android:title="@string/action_exit"
         app:showAsAction="never" />
 </menu>
