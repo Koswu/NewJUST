@@ -4,7 +4,7 @@ package com.example.lyy.newjust.gson;
  * Created by lyy on 2017/10/8.
  */
 
-public class Subject {
+public class g_Subject {
 
     private String course_name;
 

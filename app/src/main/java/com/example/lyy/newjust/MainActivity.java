@@ -55,7 +55,6 @@ public class MainActivity extends AppCompatActivity
 
     private ImageView head_image_view;
 
-    private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor editor;
 
     //记录用户首次点击返回键的时间
@@ -67,7 +66,18 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //将背景图和状态栏融合到一起的方法
+        changeStatusBar();  //将背景图和状态栏融合到一起的方法
+
+        obtain_permission();//获取权限
+
+        loadHeadPic();      //添加每日一图
+
+        init();             //初始化相关控件
+
+    }
+
+    //将背景图和状态栏融合到一起
+    private void changeStatusBar() {
         if (Build.VERSION.SDK_INT >= 21) {
             View decorView = getWindow().getDecorView();
             decorView.setSystemUiVisibility(
@@ -76,13 +86,9 @@ public class MainActivity extends AppCompatActivity
             );
             getWindow().setStatusBarColor(Color.TRANSPARENT);
         }
-
-        obtain_permission();
-
-        init();
-
     }
 
+    //权限获取
     private void obtain_permission() {
         AndPermission.with(this)
                 .requestCode(200)
@@ -93,6 +99,7 @@ public class MainActivity extends AppCompatActivity
                 .start();
     }
 
+    //权限获取的监听器
     private PermissionListener listener = new PermissionListener() {
         @Override
         public void onSucceed(int requestCode, List<String> grantedPermissions) {
@@ -126,8 +133,9 @@ public class MainActivity extends AppCompatActivity
         head_image_view = (ImageView) findViewById(R.id.head_image_view);
 
         //设置有关存储信息的
-        sharedPreferences = getSharedPreferences("data", MODE_PRIVATE);
+        SharedPreferences sharedPreferences = getSharedPreferences("data", MODE_PRIVATE);
         headPicUrl = sharedPreferences.getString("head_pic", null);
+        Log.d(TAG, "init: " + headPicUrl);
         if (headPicUrl != null) {
             Glide.with(this).load(headPicUrl).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(head_image_view);
         } else {
@@ -171,8 +179,11 @@ public class MainActivity extends AppCompatActivity
             public void onResponse(Call call, Response response) throws IOException {
                 String responseText = response.body().string();
                 Log.d(TAG, "onResponse: " + responseText);
-                Weather weather = Utility.handleWeatherResponse(responseText);
-                parseWeatherData(weather);
+                if (response!=null){
+                    Weather weather = Utility.handleWeatherResponse(responseText);
+                    parseWeatherData(weather);
+                }
+
             }
         });
     }
@@ -290,6 +301,7 @@ public class MainActivity extends AppCompatActivity
         super.onResume();
     }
 
+    //点击两次返回键退出
     @Override
     public boolean onKeyUp(int keyCode, KeyEvent event) {
         switch (keyCode) {

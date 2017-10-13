@@ -1,7 +1,5 @@
 package com.example.lyy.newjust;
 
-import android.graphics.Color;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -14,10 +12,14 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ListView;
 import android.widget.Toast;
 
+import com.example.lyy.newjust.adapter.Subject;
+import com.example.lyy.newjust.adapter.SubjectAdapter;
 import com.example.lyy.newjust.db.Subjects;
-import com.example.lyy.newjust.gson.Subject;
+import com.example.lyy.newjust.gson.g_Subject;
 import com.example.lyy.newjust.util.HttpUtil;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -25,7 +27,10 @@ import com.google.gson.reflect.TypeToken;
 import org.litepal.crud.DataSupport;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import it.neokree.materialtabs.MaterialTab;
 import it.neokree.materialtabs.MaterialTabHost;
@@ -43,23 +48,21 @@ public class SubjectActivity extends ActionBarActivity implements MaterialTabLis
     ViewPager pager;
     ViewPagerAdapter adapter;
 
+    private List<com.example.lyy.newjust.adapter.Subject> subjects_List = new ArrayList<>();
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_subject);
 
-//        //将背景图和状态栏融合到一起的方法
-//        if (Build.VERSION.SDK_INT >= 21) {
-//            View decorView = getWindow().getDecorView();
-//            decorView.setSystemUiVisibility(
-//                    View.SYSTEM_UI_FLAG_FULLSCREEN
-//                            | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-//            );
-//            getWindow().setStatusBarColor(Color.TRANSPARENT);
-//        }
-
         searchScoreRequest();
+        init();
+//        queryDataFromDB();
 
+    }
+
+    private void init() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
@@ -67,7 +70,6 @@ public class SubjectActivity extends ActionBarActivity implements MaterialTabLis
             actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setDisplayShowTitleEnabled(false);
         }
-
 
         tabHost = (MaterialTabHost) findViewById(R.id.tabHost);
         pager = (ViewPager) findViewById(R.id.pager);
@@ -80,7 +82,6 @@ public class SubjectActivity extends ActionBarActivity implements MaterialTabLis
             public void onPageSelected(int position) {
                 // when user do a swipe the selected tab change
                 tabHost.setSelectedNavigationItem(position);
-
             }
         });
 
@@ -91,8 +92,8 @@ public class SubjectActivity extends ActionBarActivity implements MaterialTabLis
                             .setText(adapter.getPageTitle(i))
                             .setTabListener(this)
             );
-
         }
+
     }
 
     //发出分数查询的请求
@@ -117,47 +118,83 @@ public class SubjectActivity extends ActionBarActivity implements MaterialTabLis
     private void parseJSONToDB(String response) {
         if (!TextUtils.isEmpty(response)) {
             Gson gson = new Gson();
-            List<Subject> subjectList = gson.fromJson(response, new TypeToken<List<Subject>>() {
+            List<g_Subject> gSubjectList = gson.fromJson(response, new TypeToken<List<g_Subject>>() {
             }.getType());
-            for (Subject subject : subjectList) {
-                Subjects subjects = new Subjects();
-                subjects.setCourse_name(subject.getCourse_name());
-                subjects.setCredit(subject.getCredit());
-                subjects.setExamination_method(subject.getExamination_method());
-                subjects.setScore(subject.getScore());
-                subjects.setStart_semester(subject.getStart_semester());
-                subjects.save();
+            for (g_Subject gSubject : gSubjectList) {
+                Subjects dbSubjects = new Subjects();
+                dbSubjects.setCourse_name(gSubject.getCourse_name());
+                dbSubjects.setCredit(gSubject.getCredit());
+                dbSubjects.setExamination_method(gSubject.getExamination_method());
+                dbSubjects.setScore(gSubject.getScore());
+                dbSubjects.setStart_semester(gSubject.getStart_semester());
+                dbSubjects.save();
             }
+            Log.d(TAG, "parseJSONToDB: " + gSubjectList.size());
         } else {
             Toast.makeText(getApplicationContext(), "服务器没有响应", Toast.LENGTH_SHORT).show();
         }
     }
 
-    //从数据库中读取数据
-    private void queryDataFromDB() {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                List<Subjects> subjectsList = DataSupport.findAll(Subjects.class);
-                for (Subjects subjects : subjectsList) {
-                    Log.d(TAG, "所在学年是：" + subjects.getStart_semester());
-                    Log.d(TAG, "该科名称是：" + subjects.getCourse_name());
-                    Log.d(TAG, "考试类别是：" + subjects.getExamination_method() + "\n");
-                    Log.d(TAG, "该科学分是：" + subjects.getCredit() + "\n");
-                    Log.d(TAG, "考试分数是：" + subjects.getScore() + "\n");
-
-                }
+    //查询考试课成绩
+    private void queryDataType1FromDB() {
+        subjects_List = new ArrayList<>();
+        List<Subjects> dbSubjectsList = DataSupport.where("examination_method=?", "考试").find(Subjects.class);
+        if (subjects_List.size() != 0) {
+            subjects_List.clear();
+            for (Subjects dbSubjects : dbSubjectsList) {
+                Subject subject = new Subject(dbSubjects.getCourse_name(), dbSubjects.getCredit(), dbSubjects.getScore());
+                subjects_List.add(subject);
             }
-        });
+            Log.d(TAG, "queryDataFromDB: " + subjects_List.size());
+        } else {
+            for (Subjects dbSubjects : dbSubjectsList) {
+                Subject subject = new Subject(dbSubjects.getCourse_name(), dbSubjects.getCredit(), dbSubjects.getScore());
+                subjects_List.add(subject);
+            }
+        }
+    }
 
+    //查询考查课成绩
+    private void queryDataType2FromDB() {
+        subjects_List = new ArrayList<>();
+        List<Subjects> dbSubjectsList = DataSupport.where("examination_method=?", "考查").find(Subjects.class);
+        if (subjects_List.size() != 0) {
+            subjects_List.clear();
+            for (Subjects dbSubjects : dbSubjectsList) {
+                Subject subject = new Subject(dbSubjects.getCourse_name(), dbSubjects.getCredit(), dbSubjects.getScore());
+                subjects_List.add(subject);
+            }
+            Log.d(TAG, "queryDataFromDB: " + subjects_List.size());
+        } else {
+            for (Subjects dbSubjects : dbSubjectsList) {
+                Subject subject = new Subject(dbSubjects.getCourse_name(), dbSubjects.getCredit(), dbSubjects.getScore());
+                subjects_List.add(subject);
+            }
+        }
+    }
+
+
+    //显示考试课结果
+    private void showResult() {
+        SubjectAdapter subjectAdapter = new SubjectAdapter(SubjectActivity.this, R.layout.subject_item, subjects_List);
+        FragmentLayout fragment = adapter.getCurrentFragment();
+        View view = fragment.getView();
+        ListView listView = view.findViewById(R.id.subject_list_item);
+        listView.setAdapter(subjectAdapter);
+        subjects_List.clear();
+        Log.d(TAG, "showResult_1: " + "考试课" + subjects_List.size());
     }
 
     @Override
     public void onTabSelected(MaterialTab tab) {
         pager.setCurrentItem(tab.getPosition());
         if (tab.getPosition() == 0) {
+            queryDataType1FromDB();
+            showResult();
             Toast.makeText(getApplicationContext(), "这是考试课", Toast.LENGTH_SHORT).show();
         } else {
+            queryDataType2FromDB();
+            showResult();
             Toast.makeText(getApplicationContext(), "这是考查课", Toast.LENGTH_SHORT).show();
         }
     }
@@ -174,12 +211,14 @@ public class SubjectActivity extends ActionBarActivity implements MaterialTabLis
 
     private class ViewPagerAdapter extends FragmentStatePagerAdapter {
 
+        private FragmentLayout mCurrentFragment;
+
         public ViewPagerAdapter(FragmentManager fm) {
             super(fm);
-
         }
 
         public Fragment getItem(int num) {
+
             return new FragmentLayout();
         }
 
@@ -196,6 +235,23 @@ public class SubjectActivity extends ActionBarActivity implements MaterialTabLis
                 return "考查课";
             }
         }
+
+        @Override
+        public Object instantiateItem(ViewGroup container, int position) {
+            return super.instantiateItem(container, position);
+        }
+
+        @Override
+        public void setPrimaryItem(ViewGroup container, int position, Object object) {
+            mCurrentFragment = (FragmentLayout) object;
+            super.setPrimaryItem(container, position, object);
+        }
+
+
+        public FragmentLayout getCurrentFragment() {
+            return mCurrentFragment;
+        }
+
     }
 
     @Override
@@ -206,5 +262,11 @@ public class SubjectActivity extends ActionBarActivity implements MaterialTabLis
                 break;
         }
         return true;
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        subjects_List.clear();
     }
 }
