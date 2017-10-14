@@ -179,9 +179,11 @@ public class MainActivity extends AppCompatActivity
             public void onResponse(Call call, Response response) throws IOException {
                 String responseText = response.body().string();
                 Log.d(TAG, "onResponse: " + responseText);
-                if (response!=null){
+                if (response.isSuccessful()) {
                     Weather weather = Utility.handleWeatherResponse(responseText);
                     parseWeatherData(weather);
+                }else {
+                    Toast.makeText(getApplicationContext(),"服务器错误",Toast.LENGTH_SHORT).show();
                 }
 
             }
@@ -256,7 +258,7 @@ public class MainActivity extends AppCompatActivity
             case R.id.action_donate:
                 Toast.makeText(MainActivity.this, "你点击了支持捐赠按钮", Toast.LENGTH_SHORT).show();
                 break;
-            case R.id.action_update:
+            case R.id.action_bg:
                 Toast.makeText(MainActivity.this, "你点击了更换背景按钮", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.action_exit:
@@ -274,11 +276,15 @@ public class MainActivity extends AppCompatActivity
 
         switch (item.getItemId()) {
             case R.id.nav_grade:
-                Intent intent = new Intent(MainActivity.this, SubjectActivity.class);
-                startActivity(intent);
+                Intent search_subject_intent = new Intent(MainActivity.this, SubjectActivity.class);
+                startActivity(search_subject_intent);
                 break;
             case R.id.nav_library:
                 Toast.makeText(MainActivity.this, "你点击了馆藏查询按钮", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.nav_myday:
+                Intent to_do_intent = new Intent(MainActivity.this, ToDoActivity.class);
+                startActivity(to_do_intent);
                 break;
             case R.id.nav_setting:
                 Toast.makeText(MainActivity.this, "你点击了设置按钮", Toast.LENGTH_SHORT).show();
