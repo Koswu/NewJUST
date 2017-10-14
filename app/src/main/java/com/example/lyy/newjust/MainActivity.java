@@ -202,7 +202,7 @@ public class MainActivity extends AppCompatActivity
 
     //发送加载首页图片的请求
     private void loadHeadPic() {
-        String requestHeadPic = "http://120.25.88.41:8088/img";
+        String requestHeadPic = "http://111.230.129.182:8080/just/img";
         HttpUtil.sendHttpRequest(requestHeadPic, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
