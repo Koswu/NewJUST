@@ -24,6 +24,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
@@ -39,13 +40,14 @@ import com.yanzhenjie.permission.RationaleListener;
 import java.io.IOException;
 import java.util.List;
 
+import cn.pedant.SweetAlert.SweetAlertDialog;
 import de.hdodenhof.circleimageview.CircleImageView;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
 
     private static final String TAG = "MainActivity";
 
@@ -164,6 +166,9 @@ public class MainActivity extends AppCompatActivity
 
         requestWeather();
 
+        TextView tv_constellation = (TextView) findViewById(R.id.tv_constellation);
+        tv_constellation.setOnClickListener(this);
+
     }
 
     //发送查询天气的请求
@@ -182,8 +187,8 @@ public class MainActivity extends AppCompatActivity
                 if (response.isSuccessful()) {
                     Weather weather = Utility.handleWeatherResponse(responseText);
                     parseWeatherData(weather);
-                }else {
-                    Toast.makeText(getApplicationContext(),"服务器错误",Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(getApplicationContext(), "服务器错误", Toast.LENGTH_SHORT).show();
                 }
 
             }
@@ -226,6 +231,29 @@ public class MainActivity extends AppCompatActivity
                 });
             }
         });
+    }
+
+    //发送星座运势的请求
+    private void requestConstellation() {
+        String requestUrl = "";
+        HttpUtil.sendHttpRequest(requestUrl, new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+
+            }
+        });
+    }
+
+    //显示星座运势信息
+    private void showConstellation(String constellation_message) {
+        new SweetAlertDialog(this)
+                .setContentText(constellation_message)
+                .show();
     }
 
     @Override
@@ -323,5 +351,15 @@ public class MainActivity extends AppCompatActivity
                 break;
         }
         return super.onKeyUp(keyCode, event);
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.tv_constellation:
+                String message = "工作按照计划有条不紊地进行着，同时与各部门、同事沟通合作也很顺畅。不过财运则一般般，日常收支平衡，不会有经济问题出现。今天有时间就多陪伴一下家人，跟他们出去走走，聊聊天。\"";
+                showConstellation(message);
+                break;
+        }
     }
 }
