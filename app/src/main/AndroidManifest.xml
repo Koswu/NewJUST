@@ -29,7 +29,7 @@
         </activity>
         <activity android:name=".SubjectActivity" />
         <activity android:name=".HeadImageActivity" />
-        <activity android:name=".ToDoActivity"></activity>
+        <activity android:name=".ToDoActivity" />
     </application>
 
 </manifest>

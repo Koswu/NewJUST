@@ -15,6 +15,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -37,6 +38,10 @@ import com.yanzhenjie.permission.Permission;
 import com.yanzhenjie.permission.PermissionListener;
 import com.yanzhenjie.permission.RationaleListener;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.IOException;
 import java.util.List;
 
@@ -56,6 +61,8 @@ public class MainActivity extends AppCompatActivity
     private CollapsingToolbarLayout collapsingToolbarLayout;
 
     private ImageView head_image_view;
+
+    private CustomBaseDialog customBaseDialog;
 
     private SharedPreferences.Editor editor;
 
@@ -169,11 +176,20 @@ public class MainActivity extends AppCompatActivity
         TextView tv_constellation = (TextView) findViewById(R.id.tv_constellation);
         tv_constellation.setOnClickListener(this);
 
+        ImageView iv_constellation = (ImageView) findViewById(R.id.iv_constellation);
+        ImageView iv_health = (ImageView) findViewById(R.id.iv_health);
+        ImageView iv_eip = (ImageView) findViewById(R.id.iv_eip);
+        ImageView iv_weibo = (ImageView) findViewById(R.id.iv_weibo);
+        Glide.with(this).load(R.drawable.bg_constellation).into(iv_constellation);
+        Glide.with(this).load(R.drawable.bg_eip).into(iv_eip);
+        Glide.with(this).load(R.drawable.bg_health).into(iv_health);
+        Glide.with(this).load(R.drawable.bg_weibo).into(iv_weibo);
+
     }
 
     //发送查询天气的请求
     private void requestWeather() {
-        String weatherUrl = "http://guolin.tech/api/weather?cityid=CN101190301&key=38c845e8310644ee83a8a7bba9b9be64";
+        String weatherUrl = "https://free-api.heweather.com/v5/weather?city=CN101190301&key=38c845e8310644ee83a8a7bba9b9be64";
         HttpUtil.sendHttpRequest(weatherUrl, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
@@ -234,8 +250,8 @@ public class MainActivity extends AppCompatActivity
     }
 
     //发送星座运势的请求
-    private void requestConstellation() {
-        String requestUrl = "";
+    private void requestConstellation(String constellation) {
+        final String requestUrl = "http://120.25.88.41/horoscope/" + constellation;
         HttpUtil.sendHttpRequest(requestUrl, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
@@ -244,16 +260,39 @@ public class MainActivity extends AppCompatActivity
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
+                String responseText = response.body().string();
+                try {
+                    JSONArray jsonArray = new JSONArray(responseText);
+                    JSONObject object1 = jsonArray.getJSONObject(1);    //这个json对象包含“综合运势”信息
+                    JSONObject object2 = jsonArray.getJSONObject(2);      //这个json对象包含“爱情运势”信息
+                    final String general_Info = object1.getString("综合运势");
+                    final String love_Info = object2.getString("爱情运势");
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            showConstellation(general_Info, love_Info);
+                        }
+                    });
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
 
             }
         });
     }
 
     //显示星座运势信息
-    private void showConstellation(String constellation_message) {
-        new SweetAlertDialog(this)
-                .setContentText(constellation_message)
-                .show();
+    private void showConstellation(String general_Info, String love_Info) {
+        String url = "http://120.25.88.41/img/img2.jpg";
+        customBaseDialog = new CustomBaseDialog(MainActivity.this, general_Info, love_Info, url);
+        customBaseDialog.onCreateView();
+        customBaseDialog.setUiBeforShow();
+        //点击空白区域能不能退出
+        customBaseDialog.setCanceledOnTouchOutside(true);
+        //按返回键能不能退出
+        customBaseDialog.setCancelable(true);
+        customBaseDialog.show();
     }
 
     @Override
@@ -315,7 +354,8 @@ public class MainActivity extends AppCompatActivity
                 startActivity(to_do_intent);
                 break;
             case R.id.nav_setting:
-                Toast.makeText(MainActivity.this, "你点击了设置按钮", Toast.LENGTH_SHORT).show();
+                //Intent settings_intent = new Intent(MainActivity.this, SettingsActivity.class);
+                //startActivity(settings_intent);
                 break;
             case R.id.nav_classroom:
                 Toast.makeText(MainActivity.this, "你点击了查询空教室按钮", Toast.LENGTH_SHORT).show();
@@ -357,9 +397,15 @@ public class MainActivity extends AppCompatActivity
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.tv_constellation:
-                String message = "工作按照计划有条不紊地进行着，同时与各部门、同事沟通合作也很顺畅。不过财运则一般般，日常收支平衡，不会有经济问题出现。今天有时间就多陪伴一下家人，跟他们出去走走，聊聊天。\"";
-                showConstellation(message);
+                requestConstellation("libra");
                 break;
         }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (customBaseDialog.isShowing())
+            customBaseDialog.dismiss();
     }
 }

@@ -16,9 +16,10 @@
 
         <android.support.v7.widget.CardView
             android:layout_width="match_parent"
-            android:layout_height="150dp"
+            android:layout_height="250dp"
             android:layout_marginBottom="15dp"
             android:layout_marginTop="35dp"
+            android:foreground="?attr/selectableItemBackground"
             app:cardCornerRadius="2dp"
             app:cardElevation="2dp">
 
@@ -33,42 +34,65 @@
 
         <android.support.v7.widget.CardView
             android:layout_width="match_parent"
-            android:layout_height="150dp"
+            android:layout_height="250dp"
             android:layout_marginBottom="15dp"
+            android:foreground="?attr/selectableItemBackground"
             app:cardCornerRadius="2dp"
             app:cardElevation="2dp">
+
+            <ImageView
+                android:id="@+id/iv_health"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="fitXY" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center"
                 android:text="健康习惯"
+                android:textColor="@color/material_white_1000"
                 android:textSize="30sp" />
 
         </android.support.v7.widget.CardView>
 
         <android.support.v7.widget.CardView
             android:layout_width="match_parent"
-            android:layout_height="150dp"
+            android:layout_height="250dp"
             android:layout_marginBottom="15dp"
+            android:foreground="?attr/selectableItemBackground"
             app:cardCornerRadius="2dp"
             app:cardElevation="2dp">
+
+            <ImageView
+                android:id="@+id/iv_weibo"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="fitXY" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center"
                 android:text="微博精选"
+                android:textColor="@color/material_white_1000"
                 android:textSize="30sp" />
 
         </android.support.v7.widget.CardView>
 
         <android.support.v7.widget.CardView
             android:layout_width="match_parent"
-            android:layout_height="150dp"
+            android:layout_height="250dp"
             android:layout_marginBottom="15dp"
+            android:foreground="?attr/selectableItemBackground"
             app:cardCornerRadius="2dp"
             app:cardElevation="2dp">
+
+            <ImageView
+                android:id="@+id/iv_constellation"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="fitXY" />
 
             <TextView
                 android:id="@+id/tv_constellation"
@@ -76,22 +100,31 @@
                 android:layout_height="match_parent"
                 android:gravity="center"
                 android:text="星座运势"
+                android:textColor="@color/material_white_1000"
                 android:textSize="30sp" />
 
         </android.support.v7.widget.CardView>
 
         <android.support.v7.widget.CardView
             android:layout_width="match_parent"
-            android:layout_height="150dp"
+            android:layout_height="250dp"
             android:layout_marginBottom="15dp"
+            android:foreground="?attr/selectableItemBackground"
             app:cardCornerRadius="2dp"
             app:cardElevation="2dp">
+
+            <ImageView
+                android:id="@+id/iv_eip"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="fitXY" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center"
                 android:text="表情包制作"
+                android:textColor="@color/material_white_1000"
                 android:textSize="30sp" />
 
         </android.support.v7.widget.CardView>
