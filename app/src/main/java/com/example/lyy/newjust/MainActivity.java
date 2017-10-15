@@ -3,6 +3,8 @@ package com.example.lyy.newjust;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.graphics.ColorMatrix;
+import android.graphics.ColorMatrixColorFilter;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -74,6 +76,12 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //设置状态栏和toolbar颜色一致
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            WindowManager.LayoutParams localLayoutParams = getWindow().getAttributes();
+            localLayoutParams.flags = (WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS | localLayoutParams.flags);
+        }
 
         changeStatusBar();  //将背景图和状态栏融合到一起的方法
 
@@ -173,18 +181,35 @@ public class MainActivity extends AppCompatActivity
 
         requestWeather();
 
-        TextView tv_constellation = (TextView) findViewById(R.id.tv_constellation);
-        tv_constellation.setOnClickListener(this);
-
         ImageView iv_constellation = (ImageView) findViewById(R.id.iv_constellation);
         ImageView iv_health = (ImageView) findViewById(R.id.iv_health);
         ImageView iv_eip = (ImageView) findViewById(R.id.iv_eip);
         ImageView iv_weibo = (ImageView) findViewById(R.id.iv_weibo);
+        ImageView iv_schedule = (ImageView) findViewById(R.id.iv_schedule);
         Glide.with(this).load(R.drawable.bg_constellation).into(iv_constellation);
         Glide.with(this).load(R.drawable.bg_eip).into(iv_eip);
         Glide.with(this).load(R.drawable.bg_health).into(iv_health);
         Glide.with(this).load(R.drawable.bg_weibo).into(iv_weibo);
+//        Glide.with(this).load(R.drawable.bg_schedule).into(iv_schedule);
+        iv_constellation.setOnClickListener(this);
+        iv_eip.setOnClickListener(this);
+        iv_health.setOnClickListener(this);
+        iv_weibo.setOnClickListener(this);
+//        iv_schedule.setOnClickListener(this);
+        changeLight(iv_health, -50);
+        changeLight(iv_constellation, -50);
+        changeLight(iv_eip, -50);
+        changeLight(iv_weibo, -50);
+//        changeLight(iv_schedule,-50);
+    }
 
+    //改变图片的亮度方法 0--原样  >0---调亮  <0---调暗
+    private void changeLight(ImageView imageView, int brightness) {
+        ColorMatrix cMatrix = new ColorMatrix();
+        cMatrix.set(new float[]{1, 0, 0, 0, brightness, 0, 1, 0, 0,
+                brightness,// 改变亮度
+                0, 0, 1, 0, brightness, 0, 0, 0, 1, 0});
+        imageView.setColorFilter(new ColorMatrixColorFilter(cMatrix));
     }
 
     //发送查询天气的请求
@@ -396,7 +421,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.tv_constellation:
+            case R.id.iv_constellation:
                 requestConstellation("libra");
                 break;
         }

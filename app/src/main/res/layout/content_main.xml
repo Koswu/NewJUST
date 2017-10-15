@@ -5,34 +5,59 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
+    android:background="@color/material_blue_grey_100"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.example.lyy.newjust.MainActivity"
     tools:showIn="@layout/app_bar_main">
 
     <LinearLayout
+        android:layout_marginTop="20dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
         <android.support.v7.widget.CardView
+            android:id="@+id/card_schedule"
             android:layout_width="match_parent"
             android:layout_height="250dp"
             android:layout_marginBottom="15dp"
-            android:layout_marginTop="35dp"
             android:foreground="?attr/selectableItemBackground"
             app:cardCornerRadius="2dp"
             app:cardElevation="2dp">
 
-            <TextView
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:gravity="center"
-                android:text="课程表"
-                android:textSize="30sp" />
+                android:orientation="vertical">
+
+                <TextView
+                    android:textColor="@color/material_black_1000"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="10dp"
+                    android:paddingTop="10dp"
+                    android:textSize="15sp"
+                    android:text="我的课程表" />
+
+                <android.support.v7.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:id="@+id/iv_schedule"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:padding="10dp"
+                        android:scaleType="fitXY" />
+
+                </android.support.v7.widget.CardView>
+
+            </LinearLayout>
 
         </android.support.v7.widget.CardView>
 
         <android.support.v7.widget.CardView
+            android:id="@+id/card_heath"
             android:layout_width="match_parent"
             android:layout_height="250dp"
             android:layout_marginBottom="15dp"
@@ -40,23 +65,39 @@
             app:cardCornerRadius="2dp"
             app:cardElevation="2dp">
 
-            <ImageView
-                android:id="@+id/iv_health"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:scaleType="fitXY" />
+                android:orientation="vertical">
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:text="健康习惯"
-                android:textColor="@color/material_white_1000"
-                android:textSize="30sp" />
+                <TextView
+                    android:textColor="@color/material_black_1000"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="10dp"
+                    android:paddingTop="10dp"
+                    android:textSize="15sp"
+                    android:text="健康习惯" />
+
+                <android.support.v7.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:id="@+id/iv_health"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:padding="10dp"
+                        android:scaleType="fitXY" />
+
+                </android.support.v7.widget.CardView>
+
+            </LinearLayout>
 
         </android.support.v7.widget.CardView>
 
         <android.support.v7.widget.CardView
+            android:id="@+id/card_weibo"
             android:layout_width="match_parent"
             android:layout_height="250dp"
             android:layout_marginBottom="15dp"
@@ -64,23 +105,39 @@
             app:cardCornerRadius="2dp"
             app:cardElevation="2dp">
 
-            <ImageView
-                android:id="@+id/iv_weibo"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:scaleType="fitXY" />
+                android:orientation="vertical">
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:text="微博精选"
-                android:textColor="@color/material_white_1000"
-                android:textSize="30sp" />
+                <TextView
+                    android:textColor="@color/material_black_1000"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="10dp"
+                    android:paddingTop="10dp"
+                    android:textSize="15sp"
+                    android:text="微博精选" />
+
+                <android.support.v7.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:id="@+id/iv_weibo"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:padding="10dp"
+                        android:scaleType="fitXY" />
+
+                </android.support.v7.widget.CardView>
+
+            </LinearLayout>
 
         </android.support.v7.widget.CardView>
 
         <android.support.v7.widget.CardView
+            android:id="@+id/card_constellation"
             android:layout_width="match_parent"
             android:layout_height="250dp"
             android:layout_marginBottom="15dp"
@@ -88,24 +145,39 @@
             app:cardCornerRadius="2dp"
             app:cardElevation="2dp">
 
-            <ImageView
-                android:id="@+id/iv_constellation"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:scaleType="fitXY" />
+                android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/tv_constellation"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:text="星座运势"
-                android:textColor="@color/material_white_1000"
-                android:textSize="30sp" />
+                <TextView
+                    android:textColor="@color/material_black_1000"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="10dp"
+                    android:paddingTop="10dp"
+                    android:textSize="15sp"
+                    android:text="星座运势" />
+
+                <android.support.v7.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:id="@+id/iv_constellation"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:padding="10dp"
+                        android:scaleType="fitXY" />
+
+                </android.support.v7.widget.CardView>
+
+            </LinearLayout>
 
         </android.support.v7.widget.CardView>
 
         <android.support.v7.widget.CardView
+            android:id="@+id/card_eip"
             android:layout_width="match_parent"
             android:layout_height="250dp"
             android:layout_marginBottom="15dp"
@@ -113,19 +185,34 @@
             app:cardCornerRadius="2dp"
             app:cardElevation="2dp">
 
-            <ImageView
-                android:id="@+id/iv_eip"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:scaleType="fitXY" />
+                android:orientation="vertical">
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:text="表情包制作"
-                android:textColor="@color/material_white_1000"
-                android:textSize="30sp" />
+                <TextView
+                    android:textColor="@color/material_black_1000"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="10dp"
+                    android:paddingTop="10dp"
+                    android:textSize="15sp"
+                    android:text="表情包制作" />
+
+                <android.support.v7.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:id="@+id/iv_eip"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:padding="10dp"
+                        android:scaleType="fitXY" />
+
+                </android.support.v7.widget.CardView>
+
+            </LinearLayout>
 
         </android.support.v7.widget.CardView>
 

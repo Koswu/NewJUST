@@ -5,20 +5,23 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/gradient"
+    android:fitsSystemWindows="true"
     android:orientation="vertical">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/todo_toolbar"
         android:layout_width="match_parent"
         android:layout_height="?android:attr/actionBarSize"
-        android:background="@android:color/transparent">
+        android:background="@android:color/transparent"
+        android:fitsSystemWindows="true">
 
         <TextView
             android:id="@+id/text_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="14 Feb, 2016"
+            android:fitsSystemWindows="true"
+            android:text="我 的 一 天"
             android:textColor="@android:color/white"
             android:textSize="20sp" />
 

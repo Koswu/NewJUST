@@ -1,5 +1,7 @@
 package com.example.lyy.newjust;
 
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -13,6 +15,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -37,11 +40,13 @@ import java.util.List;
 import it.neokree.materialtabs.MaterialTab;
 import it.neokree.materialtabs.MaterialTabHost;
 import it.neokree.materialtabs.MaterialTabListener;
+import me.imid.swipebacklayout.lib.SwipeBackLayout;
+import me.imid.swipebacklayout.lib.app.SwipeBackActivity;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
 
-public class SubjectActivity extends ActionBarActivity implements MaterialTabListener {
+public class SubjectActivity extends SwipeBackActivity implements MaterialTabListener {
 
     private static final String TAG = "SubjectActivity";
 
@@ -60,9 +65,34 @@ public class SubjectActivity extends ActionBarActivity implements MaterialTabLis
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_subject);
 
+        //设置状态栏和toolbar颜色一致
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            WindowManager.LayoutParams localLayoutParams = getWindow().getAttributes();
+            localLayoutParams.flags = (WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS | localLayoutParams.flags);
+        }
+
+        setSwipeBackEnable(true);   // 可以调用该方法，设置是否允许滑动退出
+        SwipeBackLayout mSwipeBackLayout = getSwipeBackLayout();
+        // 设置滑动方向，可设置EDGE_LEFT, EDGE_RIGHT, EDGE_ALL, EDGE_BOTTOM
+        mSwipeBackLayout.setEdgeTrackingEnabled(SwipeBackLayout.EDGE_LEFT);
+        // 滑动退出的效果只能从边界滑动才有效果，如果要扩大touch的范围，可以调用这个方法
+        mSwipeBackLayout.setEdgeSize(200);
+
         searchScoreRequest();
         searchPointRequest();
         init();
+    }
+
+    //将背景图和状态栏融合到一起
+    private void changeStatusBar() {
+        if (Build.VERSION.SDK_INT >= 21) {
+            View decorView = getWindow().getDecorView();
+            decorView.setSystemUiVisibility(
+                    View.SYSTEM_UI_FLAG_FULLSCREEN
+                            | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+            );
+            getWindow().setStatusBarColor(Color.TRANSPARENT);
+        }
     }
 
     private void init() {
@@ -72,13 +102,13 @@ public class SubjectActivity extends ActionBarActivity implements MaterialTabLis
 
         tv_all_point = (TextView) findViewById(R.id.tv_all_point);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setDisplayShowTitleEnabled(false);
-        }
+//        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+//        setSupportActionBar(toolbar);
+//        ActionBar actionBar = getSupportActionBar();
+//        if (actionBar != null) {
+//            actionBar.setDisplayHomeAsUpEnabled(true);
+//            actionBar.setDisplayShowTitleEnabled(false);
+//        }
 
         tabHost = (MaterialTabHost) findViewById(R.id.tabHost);
         pager = (ViewPager) findViewById(R.id.pager);
@@ -291,13 +321,13 @@ public class SubjectActivity extends ActionBarActivity implements MaterialTabLis
 
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                finish();
-                break;
-        }
-        return true;
-    }
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//        switch (item.getItemId()) {
+//            case android.R.id.home:
+//                finish();
+//                break;
+//        }
+//        return true;
+//    }
 }
