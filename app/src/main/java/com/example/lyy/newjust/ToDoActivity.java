@@ -136,7 +136,9 @@ public class ToDoActivity extends SwipeBackActivity implements BatListener, OnIt
 
     @Override
     public void onClick(BatModel item, int position) {
-        Toast.makeText(this, item.getText(), Toast.LENGTH_SHORT).show();
+        if (item.getText().length()>15){
+            Toast.makeText(this, item.getText(), Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override

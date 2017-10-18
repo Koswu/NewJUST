@@ -7,6 +7,8 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.SET_WALLPAPER" />
+    <uses-permission android:name="android.permission.INJECT_EVENTS"
+        tools:ignore="ProtectedPermissions" />
 
     <application
         android:name="org.litepal.LitePalApplication"
@@ -27,9 +29,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".SubjectActivity" />
+        <activity
+            android:name=".SubjectActivity"
+            android:launchMode="singleTop" />
         <activity android:name=".HeadImageActivity" />
         <activity android:name=".ToDoActivity" />
+        <activity android:name=".SettingsActivity"></activity>
     </application>
 
 </manifest>

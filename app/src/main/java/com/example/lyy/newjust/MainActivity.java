@@ -24,6 +24,7 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
@@ -63,8 +64,6 @@ public class MainActivity extends AppCompatActivity
     private CollapsingToolbarLayout collapsingToolbarLayout;
 
     private ImageView head_image_view;
-
-    private CustomBaseDialog customBaseDialog;
 
     private SharedPreferences.Editor editor;
 
@@ -288,29 +287,29 @@ public class MainActivity extends AppCompatActivity
                 String responseText = response.body().string();
                 try {
                     JSONArray jsonArray = new JSONArray(responseText);
+                    JSONObject object0 = jsonArray.getJSONObject(0);    //这个json对象包含“图片地址”信息
                     JSONObject object1 = jsonArray.getJSONObject(1);    //这个json对象包含“综合运势”信息
                     JSONObject object2 = jsonArray.getJSONObject(2);      //这个json对象包含“爱情运势”信息
+                    final String pic_url = object0.getString("imgUrl");
                     final String general_Info = object1.getString("综合运势");
                     final String love_Info = object2.getString("爱情运势");
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            showConstellation(general_Info, love_Info);
+                            showConstellation(general_Info, love_Info, pic_url);
                         }
                     });
 
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-
             }
         });
     }
 
     //显示星座运势信息
-    private void showConstellation(String general_Info, String love_Info) {
-        String url = "http://120.25.88.41/img/img2.jpg";
-        customBaseDialog = new CustomBaseDialog(MainActivity.this, general_Info, love_Info, url);
+    private void showConstellation(String general_Info, String love_Info, String pic_url) {
+        CustomBaseDialog customBaseDialog = new CustomBaseDialog(MainActivity.this, general_Info, love_Info, pic_url);
         customBaseDialog.onCreateView();
         customBaseDialog.setUiBeforShow();
         //点击空白区域能不能退出
@@ -379,8 +378,8 @@ public class MainActivity extends AppCompatActivity
                 startActivity(to_do_intent);
                 break;
             case R.id.nav_setting:
-                //Intent settings_intent = new Intent(MainActivity.this, SettingsActivity.class);
-                //startActivity(settings_intent);
+                Intent settings_intent = new Intent(MainActivity.this, SettingsActivity.class);
+                startActivity(settings_intent);
                 break;
             case R.id.nav_classroom:
                 Toast.makeText(MainActivity.this, "你点击了查询空教室按钮", Toast.LENGTH_SHORT).show();
@@ -427,10 +426,4 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    @Override
-    protected void onStop() {
-        super.onStop();
-        if (customBaseDialog.isShowing())
-            customBaseDialog.dismiss();
-    }
 }

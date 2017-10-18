@@ -1,8 +1,10 @@
 package com.example.lyy.newjust;
 
+import android.app.Instrumentation;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
@@ -13,6 +15,7 @@ import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -24,6 +27,7 @@ import com.example.lyy.newjust.adapter.Point;
 import com.example.lyy.newjust.adapter.PointAdapter;
 import com.example.lyy.newjust.adapter.Subject;
 import com.example.lyy.newjust.adapter.SubjectAdapter;
+import com.example.lyy.newjust.db.DBSubject;
 import com.example.lyy.newjust.gson.g_Subject;
 import com.example.lyy.newjust.util.HttpUtil;
 import com.google.gson.Gson;
@@ -32,7 +36,9 @@ import com.google.gson.reflect.TypeToken;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.litepal.crud.DataSupport;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -57,6 +63,8 @@ public class SubjectActivity extends SwipeBackActivity implements MaterialTabLis
 
     private List<Subject> adapter_list_kaoshi;
     private List<Subject> adapter_list_kaocha;
+
+    private List<DBSubject> dbSubjectList;
 
     private TextView tv_all_point;
 
@@ -83,6 +91,7 @@ public class SubjectActivity extends SwipeBackActivity implements MaterialTabLis
         init();
     }
 
+
     //将背景图和状态栏融合到一起
     private void changeStatusBar() {
         if (Build.VERSION.SDK_INT >= 21) {
@@ -99,6 +108,7 @@ public class SubjectActivity extends SwipeBackActivity implements MaterialTabLis
 
         adapter_list_kaoshi = new ArrayList<>();
         adapter_list_kaocha = new ArrayList<>();
+        dbSubjectList = new ArrayList<>();
 
         tv_all_point = (TextView) findViewById(R.id.tv_all_point);
 
@@ -202,6 +212,25 @@ public class SubjectActivity extends SwipeBackActivity implements MaterialTabLis
             Gson gson = new Gson();
             List<g_Subject> gSubjectList = gson.fromJson(response, new TypeToken<List<g_Subject>>() {
             }.getType());
+            for (int i = 0; i < gSubjectList.size(); i++) {
+                DBSubject dbSubject = new DBSubject();
+                dbSubject.setCourse_name(gSubjectList.get(i).getCourse_name());
+                dbSubject.setCredit(gSubjectList.get(i).getCredit());
+                dbSubject.setExamination_method(gSubjectList.get(i).getExamination_method());
+                dbSubject.setScore(gSubjectList.get(i).getScore());
+                dbSubject.setStart_semester(gSubjectList.get(i).getStart_semester());
+                dbSubject.save();
+                dbSubjectList.add(dbSubject);
+            }
+//            for (int i = 0; i < gSubjectList.size(); i++) {
+//                Fragment fragment=new FragmentLayout();
+//                Bundle bundle=new Bundle();
+//                bundle.putString("name",gSubjectList.get(i).getCourse_name());
+//                bundle.putString("credit",gSubjectList.get(i).getCredit());
+//                bundle.putString("score",gSubjectList.get(i).getScore());
+//                fragment.setArguments(bundle);
+//            }
+            Log.d(TAG, "parseJSONData: " + dbSubjectList.size());
             chooseResult(gSubjectList);
             Log.d(TAG, "parseJSONToDB: " + gSubjectList.size());
         } else {
@@ -321,13 +350,15 @@ public class SubjectActivity extends SwipeBackActivity implements MaterialTabLis
 
     }
 
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//        switch (item.getItemId()) {
-//            case android.R.id.home:
-//                finish();
-//                break;
-//        }
-//        return true;
-//    }
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        DataSupport.deleteAll(DBSubject.class);
+    }
+
+    @Override
+    protected void onRestart() {
+        searchScoreRequest();
+        super.onRestart();
+    }
 }
