@@ -7,7 +7,8 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.SET_WALLPAPER" />
-    <uses-permission android:name="android.permission.INJECT_EVENTS"
+    <uses-permission
+        android:name="android.permission.INJECT_EVENTS"
         tools:ignore="ProtectedPermissions" />
 
     <application
@@ -34,7 +35,8 @@
             android:launchMode="singleTop" />
         <activity android:name=".HeadImageActivity" />
         <activity android:name=".ToDoActivity" />
-        <activity android:name=".SettingsActivity"></activity>
+        <activity android:name=".SettingsActivity" />
+        <activity android:name=".ProfileActivity"></activity>
     </application>
 
 </manifest>
