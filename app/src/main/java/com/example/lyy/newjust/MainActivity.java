@@ -1,34 +1,30 @@
 package com.example.lyy.newjust;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.ColorMatrix;
 import android.graphics.ColorMatrixColorFilter;
+import android.graphics.Point;
 import android.os.Build;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.annotation.RequiresApi;
-import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v4.widget.ViewDragHelper;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.KeyEvent;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
@@ -39,17 +35,15 @@ import com.example.lyy.newjust.util.Utility;
 import com.yanzhenjie.permission.AndPermission;
 import com.yanzhenjie.permission.Permission;
 import com.yanzhenjie.permission.PermissionListener;
-import com.yanzhenjie.permission.RationaleListener;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.util.List;
 
-import cn.pedant.SweetAlert.SweetAlertDialog;
-import de.hdodenhof.circleimageview.CircleImageView;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
@@ -86,9 +80,9 @@ public class MainActivity extends AppCompatActivity
 
         obtain_permission();//获取权限
 
-        loadHeadPic();      //添加每日一图
-
         init();             //初始化相关控件
+
+        loadHeadPic();      //添加每日一图
 
     }
 
@@ -173,6 +167,8 @@ public class MainActivity extends AppCompatActivity
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
+        setDrawerLeftEdgeSize(MainActivity.this, drawer, 1);
+
         toggle.syncState();
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
@@ -195,7 +191,7 @@ public class MainActivity extends AppCompatActivity
         iv_health.setOnClickListener(this);
         iv_weibo.setOnClickListener(this);
 //        iv_schedule.setOnClickListener(this);
-        changeLight(iv_health, -50);
+        //changeLight(iv_health, -50);
         changeLight(iv_constellation, -50);
         changeLight(iv_eip, -50);
         changeLight(iv_weibo, -50);
@@ -210,6 +206,33 @@ public class MainActivity extends AppCompatActivity
                 0, 0, 1, 0, brightness, 0, 0, 0, 1, 0});
         imageView.setColorFilter(new ColorMatrixColorFilter(cMatrix));
     }
+
+    //解决DrawerLayout不能全屏滑动的问题
+    private void setDrawerLeftEdgeSize(Activity activity, DrawerLayout drawerLayout, float displayWidthPercentage) {
+        if (activity == null || drawerLayout == null) return;
+        try {
+            // 找到 ViewDragHelper 并设置 Accessible 为true
+            Field leftDraggerField =
+                    drawerLayout.getClass().getDeclaredField("mLeftDragger");//Right
+            leftDraggerField.setAccessible(true);
+            ViewDragHelper leftDragger = (ViewDragHelper) leftDraggerField.get(drawerLayout);
+
+            // 找到 edgeSizeField 并设置 Accessible 为true
+            Field edgeSizeField = leftDragger.getClass().getDeclaredField("mEdgeSize");
+            edgeSizeField.setAccessible(true);
+            int edgeSize = edgeSizeField.getInt(leftDragger);
+
+            // 设置新的边缘大小
+            Point displaySize = new Point();
+            activity.getWindowManager().getDefaultDisplay().getSize(displaySize);
+            edgeSizeField.setInt(leftDragger, Math.max(edgeSize, (int) (displaySize.x *
+                    displayWidthPercentage)));
+        } catch (NoSuchFieldException e) {
+        } catch (IllegalArgumentException e) {
+        } catch (IllegalAccessException e) {
+        }
+    }
+
 
     //发送查询天气的请求
     private void requestWeather() {
