@@ -43,4 +43,16 @@
 
     <include layout="@layout/content_main" />
 
+    <com.nightonke.boommenu.BoomMenuButton
+        android:id="@+id/bmb"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_marginRight="5dp"
+        app:bmb_boomInWholeScreen="false"
+        app:bmb_buttonEnum="textOutsideCircle"
+        app:bmb_buttonPlaceEnum="buttonPlace_sc_5_1"
+        app:bmb_normalColor="@color/material_white_1000"
+        app:bmb_piecePlaceEnum="piecePlace_dot_5_1" />
+
 </android.support.design.widget.CoordinatorLayout>

@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.graphics.ColorMatrix;
 import android.graphics.ColorMatrixColorFilter;
 import android.graphics.Point;
+import android.graphics.Rect;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
@@ -32,6 +33,9 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.lyy.newjust.gson.Weather;
 import com.example.lyy.newjust.util.HttpUtil;
 import com.example.lyy.newjust.util.Utility;
+import com.nightonke.boommenu.BoomButtons.OnBMClickListener;
+import com.nightonke.boommenu.BoomButtons.TextOutsideCircleButton;
+import com.nightonke.boommenu.BoomMenuButton;
 import com.yanzhenjie.permission.AndPermission;
 import com.yanzhenjie.permission.Permission;
 import com.yanzhenjie.permission.PermissionListener;
@@ -44,6 +48,7 @@ import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.List;
 
+import cn.pedant.SweetAlert.SweetAlertDialog;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
@@ -59,7 +64,12 @@ public class MainActivity extends AppCompatActivity
 
     private ImageView head_image_view;
 
+    private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor editor;
+
+    private String constellation_en;
+
+    private static int index = 0;
 
     //记录用户首次点击返回键的时间
     private long firstTime = 0;
@@ -143,7 +153,7 @@ public class MainActivity extends AppCompatActivity
         head_image_view = (ImageView) findViewById(R.id.head_image_view);
 
         //设置有关存储信息的
-        SharedPreferences sharedPreferences = getSharedPreferences("data", MODE_PRIVATE);
+        sharedPreferences = getSharedPreferences("data", MODE_PRIVATE);
         headPicUrl = sharedPreferences.getString("head_pic", null);
         Log.d(TAG, "init: " + headPicUrl);
         if (headPicUrl != null) {
@@ -178,25 +188,68 @@ public class MainActivity extends AppCompatActivity
 
         ImageView iv_constellation = (ImageView) findViewById(R.id.iv_constellation);
         ImageView iv_health = (ImageView) findViewById(R.id.iv_health);
-        ImageView iv_eip = (ImageView) findViewById(R.id.iv_eip);
+
         ImageView iv_weibo = (ImageView) findViewById(R.id.iv_weibo);
         ImageView iv_schedule = (ImageView) findViewById(R.id.iv_schedule);
+        ImageView iv_one_day = (ImageView) findViewById(R.id.iv_one_day);
         Glide.with(this).load(R.drawable.bg_constellation).into(iv_constellation);
-        Glide.with(this).load(R.drawable.bg_eip).into(iv_eip);
         Glide.with(this).load(R.drawable.bg_health).into(iv_health);
         Glide.with(this).load(R.drawable.bg_weibo).into(iv_weibo);
+        Glide.with(this).load(R.drawable.bg_one_day).into(iv_one_day);
 //        Glide.with(this).load(R.drawable.bg_schedule).into(iv_schedule);
         iv_constellation.setOnClickListener(this);
-        iv_eip.setOnClickListener(this);
         iv_health.setOnClickListener(this);
         iv_weibo.setOnClickListener(this);
 //        iv_schedule.setOnClickListener(this);
-        //changeLight(iv_health, -50);
-        changeLight(iv_constellation, -50);
-        changeLight(iv_eip, -50);
-        changeLight(iv_weibo, -50);
-//        changeLight(iv_schedule,-50);
+
+        //设置底部弹窗
+        BoomMenuButton boomMenuButton = (BoomMenuButton) findViewById(R.id.bmb);
+        for (int i = 0; i < boomMenuButton.getPiecePlaceEnum().pieceNumber(); i++) {
+            TextOutsideCircleButton.Builder builder = new TextOutsideCircleButton.Builder()
+                    .listener(new OnBMClickListener() {
+                        @Override
+                        public void onBoomButtonClick(int index) {
+                            switch (index) {
+                                case 0:
+                                    Intent emsIntent = new Intent(MainActivity.this, EMSActivity.class);
+                                    startActivity(emsIntent);
+                                    break;
+                                case 1:
+                                    break;
+                            }
+                        }
+                    })
+                    .imagePadding(new Rect(25, 25, 25, 25))
+                    .normalImageRes(getImageResource())
+                    .normalText(getext())
+                    .textSize(15);
+            boomMenuButton.addBuilder(builder);
+        }
     }
+
+    static String getext() {
+        if (index >= text.length) index = 0;
+        return text[index++];
+
+    }
+
+    private static String[] text = new String[]{"快递查询", "文字识别", "表情包制作", "4444", "555545"
+
+    };
+    private static int imageResourceIndex = 0;
+
+    static int getImageResource() {
+        if (imageResourceIndex >= imageResources.length) imageResourceIndex = 0;
+        return imageResources[imageResourceIndex++];
+    }
+
+    private static int[] imageResources = new int[]{
+            R.drawable.ic_menu_ems,
+            R.drawable.ic_menu_ocr,
+            R.drawable.ic_menu_eip,
+            R.drawable.ic_menu_grade,
+            R.drawable.ic_menu_library
+    };
 
     //改变图片的亮度方法 0--原样  >0---调亮  <0---调暗
     private void changeLight(ImageView imageView, int brightness) {
@@ -228,8 +281,11 @@ public class MainActivity extends AppCompatActivity
             edgeSizeField.setInt(leftDragger, Math.max(edgeSize, (int) (displaySize.x *
                     displayWidthPercentage)));
         } catch (NoSuchFieldException e) {
+
         } catch (IllegalArgumentException e) {
+
         } catch (IllegalAccessException e) {
+
         }
     }
 
@@ -314,6 +370,7 @@ public class MainActivity extends AppCompatActivity
                     JSONObject object1 = jsonArray.getJSONObject(1);    //这个json对象包含“综合运势”信息
                     JSONObject object2 = jsonArray.getJSONObject(2);      //这个json对象包含“爱情运势”信息
                     final String pic_url = object0.getString("imgUrl");
+                    Log.d(TAG, "onResponse: " + pic_url);
                     final String general_Info = object1.getString("综合运势");
                     final String love_Info = object2.getString("爱情运势");
                     runOnUiThread(new Runnable() {
@@ -444,7 +501,25 @@ public class MainActivity extends AppCompatActivity
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.iv_constellation:
-                requestConstellation("libra");
+                constellation_en = sharedPreferences.getString("constellation_en", null);
+                if (constellation_en != null) {
+                    requestConstellation(constellation_en);
+                } else {
+                    new SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE)
+                            .setTitleText("未检测到你的星座！")
+                            .setContentText("需要前往设置你的星座吗？")
+                            .setCancelText("关闭")
+                            .setConfirmText("设置")
+                            .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                                @Override
+                                public void onClick(SweetAlertDialog sDialog) {
+                                    Intent intent = new Intent(MainActivity.this, ProfileActivity.class);
+                                    startActivity(intent);
+                                    sDialog.dismiss();
+                                }
+                            })
+                            .show();
+                }
                 break;
         }
     }

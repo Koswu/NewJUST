@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#F8FCF8"
     app:cardCornerRadius="8dp">
 
     <LinearLayout
@@ -14,7 +15,7 @@
             android:id="@+id/iv_dialog"
             android:layout_width="match_parent"
             android:layout_height="300dp"
-            android:background="@color/material_blue_200"
+            android:background="#F8FCF8"
             android:scaleType="centerCrop" />
 
         <ScrollView
@@ -31,29 +32,31 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="综合运势"
-                    android:textColor="@color/material_black_1000"
+                    android:textColor="@color/material_grey_700"
                     android:textSize="18sp" />
 
                 <TextView
                     android:id="@+id/tv_general"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
                     android:textColor="@color/material_black_1000"
-                    android:textSize="20sp" />
+                    android:textSize="17sp" />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="爱情运势"
-                    android:textColor="@color/material_black_1000"
+                    android:textColor="@color/material_grey_700"
                     android:textSize="18sp" />
 
                 <TextView
                     android:id="@+id/tv_love"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
                     android:textColor="@color/material_black_1000"
-                    android:textSize="20sp" />
+                    android:textSize="17sp" />
 
             </LinearLayout>
 
