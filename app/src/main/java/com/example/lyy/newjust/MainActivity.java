@@ -1,6 +1,7 @@
 package com.example.lyy.newjust;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -32,7 +33,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.lyy.newjust.gson.Weather;
 import com.example.lyy.newjust.util.HttpUtil;
-import com.example.lyy.newjust.util.Utility;
+import com.example.lyy.newjust.util.Util;
 import com.nightonke.boommenu.BoomButtons.OnBMClickListener;
 import com.nightonke.boommenu.BoomButtons.TextOutsideCircleButton;
 import com.nightonke.boommenu.BoomMenuButton;
@@ -49,6 +50,7 @@ import java.lang.reflect.Field;
 import java.util.List;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
+import dmax.dialog.SpotsDialog;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
@@ -68,6 +70,8 @@ public class MainActivity extends AppCompatActivity
     private SharedPreferences.Editor editor;
 
     private String constellation_en;
+
+    private AlertDialog dialog;
 
     private static int index = 0;
 
@@ -113,7 +117,8 @@ public class MainActivity extends AppCompatActivity
         AndPermission.with(this)
                 .requestCode(200)
                 .permission(
-                        Permission.STORAGE
+                        Permission.STORAGE,
+                        Permission.CAMERA
                 )
                 .callback(listener)
                 .start();
@@ -177,9 +182,8 @@ public class MainActivity extends AppCompatActivity
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
-        setDrawerLeftEdgeSize(MainActivity.this, drawer, 1);
-
         toggle.syncState();
+        setDrawerLeftEdgeSize(MainActivity.this, drawer, (float) 0.2);
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
@@ -215,6 +219,8 @@ public class MainActivity extends AppCompatActivity
                                     startActivity(emsIntent);
                                     break;
                                 case 1:
+                                    Intent ocrIntent=new Intent(MainActivity.this,OCRActivity.class);
+                                    startActivity(ocrIntent);
                                     break;
                             }
                         }
@@ -304,7 +310,7 @@ public class MainActivity extends AppCompatActivity
                 String responseText = response.body().string();
                 Log.d(TAG, "onResponse: " + responseText);
                 if (response.isSuccessful()) {
-                    Weather weather = Utility.handleWeatherResponse(responseText);
+                    Weather weather = Util.handleWeatherResponse(responseText);
                     parseWeatherData(weather);
                 } else {
                     Toast.makeText(getApplicationContext(), "服务器错误", Toast.LENGTH_SHORT).show();
@@ -377,6 +383,7 @@ public class MainActivity extends AppCompatActivity
                         @Override
                         public void run() {
                             showConstellation(general_Info, love_Info, pic_url);
+                            dialog.dismiss();
                         }
                     });
 
@@ -503,6 +510,8 @@ public class MainActivity extends AppCompatActivity
             case R.id.iv_constellation:
                 constellation_en = sharedPreferences.getString("constellation_en", null);
                 if (constellation_en != null) {
+                    dialog = new SpotsDialog(MainActivity.this);
+                    dialog.show();
                     requestConstellation(constellation_en);
                 } else {
                     new SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE)
