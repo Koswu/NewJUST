@@ -32,7 +32,11 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-public class OCRActivity extends AppCompatActivity {
+import de.hdodenhof.circleimageview.CircleImageView;
+import me.imid.swipebacklayout.lib.SwipeBackLayout;
+import me.imid.swipebacklayout.lib.app.SwipeBackActivity;
+
+public class OCRActivity extends SwipeBackActivity {
 
     private static final String TAG = "MainActivity";
 
@@ -51,6 +55,13 @@ public class OCRActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ocr);
 
+        setSwipeBackEnable(true);   // 可以调用该方法，设置是否允许滑动退出
+        SwipeBackLayout mSwipeBackLayout = getSwipeBackLayout();
+        // 设置滑动方向，可设置EDGE_LEFT, EDGE_RIGHT, EDGE_ALL, EDGE_BOTTOM
+        mSwipeBackLayout.setEdgeTrackingEnabled(SwipeBackLayout.EDGE_LEFT);
+        // 滑动退出的效果只能从边界滑动才有效果，如果要扩大touch的范围，可以调用这个方法
+        mSwipeBackLayout.setEdgeSize(200);
+
         initView();
     }
 
@@ -60,7 +71,7 @@ public class OCRActivity extends AppCompatActivity {
 
         mView = new CatLoadingView();
 
-        Button photo_btn = (Button) findViewById(R.id.photo_btn);
+        CircleImageView photo_btn = (CircleImageView) findViewById(R.id.photo_btn);
         photo_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -81,7 +92,7 @@ public class OCRActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         Log.d(TAG, "onActivityResult: " + requestCode + " " + resultCode);
-        Log.d(TAG, "onActivityResult: "+Activity.RESULT_OK);
+        Log.d(TAG, "onActivityResult: " + Activity.RESULT_OK);
         if (requestCode == 1000 && resultCode == 0) {
             mView.dismiss();
             Toast.makeText(getApplicationContext(), "你取消了本次识别", Toast.LENGTH_SHORT).show();

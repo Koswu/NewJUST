@@ -219,7 +219,7 @@ public class MainActivity extends AppCompatActivity
                                     startActivity(emsIntent);
                                     break;
                                 case 1:
-                                    Intent ocrIntent=new Intent(MainActivity.this,OCRActivity.class);
+                                    Intent ocrIntent = new Intent(MainActivity.this, OCRActivity.class);
                                     startActivity(ocrIntent);
                                     break;
                             }
@@ -334,7 +334,7 @@ public class MainActivity extends AppCompatActivity
 
     //发送加载首页图片的请求
     private void loadHeadPic() {
-        String requestHeadPic = "http://111.230.129.182:8080/just/img";
+        String requestHeadPic = "http://120.25.88.41/just/img";
         HttpUtil.sendHttpRequest(requestHeadPic, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {

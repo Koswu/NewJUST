@@ -84,13 +84,14 @@
                 <android.support.v7.widget.CardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:cardCornerRadius="8dp">
+                    android:layout_margin="10dp"
+                    app:cardCornerRadius="8dp"
+                    app:cardElevation="5dp">
 
                     <ImageView
                         android:id="@+id/iv_one_day"
                         android:layout_width="match_parent"
                         android:layout_height="200dp"
-                        android:padding="10dp"
                         android:scaleType="centerCrop" />
 
                 </android.support.v7.widget.CardView>
@@ -127,13 +128,14 @@
                 <android.support.v7.widget.CardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:cardCornerRadius="8dp">
+                    android:layout_margin="10dp"
+                    app:cardCornerRadius="8dp"
+                    app:cardElevation="5dp">
 
                     <ImageView
                         android:id="@+id/iv_health"
                         android:layout_width="match_parent"
                         android:layout_height="200dp"
-                        android:padding="10dp"
                         android:scaleType="centerCrop" />
 
                 </android.support.v7.widget.CardView>
@@ -169,13 +171,15 @@
 
                 <android.support.v7.widget.CardView
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    app:cardCornerRadius="8dp"
+                    app:cardElevation="5dp">
 
                     <ImageView
                         android:id="@+id/iv_weibo"
                         android:layout_width="match_parent"
                         android:layout_height="200dp"
-                        android:padding="10dp"
                         android:scaleType="centerCrop" />
 
                 </android.support.v7.widget.CardView>
@@ -211,13 +215,15 @@
 
                 <android.support.v7.widget.CardView
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    app:cardCornerRadius="8dp"
+                    app:cardElevation="5dp">
 
                     <ImageView
                         android:id="@+id/iv_constellation"
                         android:layout_width="match_parent"
                         android:layout_height="200dp"
-                        android:padding="10dp"
                         android:scaleType="centerCrop" />
 
                 </android.support.v7.widget.CardView>
