@@ -17,6 +17,7 @@
     <string name="item_library">馆藏查询</string>
     <string name="item_classroom">空教室查询</string>
     <string name="item_grade">成绩查询</string>
+    <string name="item_pe">体育课查询</string>
     <string name="item_myday">我的一天</string>
     <string name="title_activity_settings">Settings</string>
 

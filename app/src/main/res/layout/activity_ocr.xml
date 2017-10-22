@@ -10,12 +10,15 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="10">
+        android:layout_weight="10"
+        android:padding="25dp">
 
         <TextView
             android:id="@+id/tv_ocr_result"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textSize="20sp" />
 
     </ScrollView>
 

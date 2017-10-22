@@ -39,7 +39,10 @@
         <activity android:name=".SettingsActivity" />
         <activity android:name=".ProfileActivity" />
         <activity android:name=".EMSActivity" />
-        <activity android:name=".OCRActivity"></activity>
+        <activity android:name=".OCRActivity" />
+        <activity android:name=".EipActivity" />
+        <activity android:name=".TranslateActivity" />
+        <activity android:name=".ShiTuActivity"></activity>
     </application>
 
 </manifest>

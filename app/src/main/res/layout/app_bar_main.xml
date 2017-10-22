@@ -51,8 +51,8 @@
         android:layout_marginRight="5dp"
         app:bmb_boomInWholeScreen="false"
         app:bmb_buttonEnum="textOutsideCircle"
-        app:bmb_buttonPlaceEnum="buttonPlace_sc_5_1"
+        app:bmb_buttonPlaceEnum="buttonPlace_sc_9_1"
         app:bmb_normalColor="@color/material_white_1000"
-        app:bmb_piecePlaceEnum="piecePlace_dot_5_1" />
+        app:bmb_piecePlaceEnum="piecePlace_dot_9_1" />
 
 </android.support.design.widget.CoordinatorLayout>

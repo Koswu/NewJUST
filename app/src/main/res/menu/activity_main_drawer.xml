@@ -17,9 +17,9 @@
                 android:icon="@drawable/ic_menu_classroom"
                 android:title="@string/item_classroom" />
             <item
-                android:id="@+id/nav_myday"
-                android:icon="@drawable/ic_menu_myday"
-                android:title="@string/item_myday" />
+                android:id="@+id/nav_pe"
+                android:icon="@drawable/ic_menu_pe"
+                android:title="@string/item_pe" />
         </menu>
 
     </item>

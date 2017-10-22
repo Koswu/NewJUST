@@ -34,6 +34,9 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.lyy.newjust.gson.Weather;
 import com.example.lyy.newjust.util.HttpUtil;
 import com.example.lyy.newjust.util.Util;
+import com.flyco.animation.SlideEnter.SlideBottomEnter;
+import com.flyco.dialog.listener.OnBtnClickL;
+import com.flyco.dialog.widget.NormalDialog;
 import com.nightonke.boommenu.BoomButtons.OnBMClickListener;
 import com.nightonke.boommenu.BoomButtons.TextOutsideCircleButton;
 import com.nightonke.boommenu.BoomMenuButton;
@@ -192,18 +195,20 @@ public class MainActivity extends AppCompatActivity
 
         ImageView iv_constellation = (ImageView) findViewById(R.id.iv_constellation);
         ImageView iv_health = (ImageView) findViewById(R.id.iv_health);
-
         ImageView iv_weibo = (ImageView) findViewById(R.id.iv_weibo);
         ImageView iv_schedule = (ImageView) findViewById(R.id.iv_schedule);
-        ImageView iv_one_day = (ImageView) findViewById(R.id.iv_one_day);
+        ImageView iv_every_day = (ImageView) findViewById(R.id.iv_every_day);
+        ImageView iv_todo = (ImageView) findViewById(R.id.iv_todo);
         Glide.with(this).load(R.drawable.bg_constellation).into(iv_constellation);
         Glide.with(this).load(R.drawable.bg_health).into(iv_health);
         Glide.with(this).load(R.drawable.bg_weibo).into(iv_weibo);
-        Glide.with(this).load(R.drawable.bg_one_day).into(iv_one_day);
+        Glide.with(this).load(R.drawable.bg_every_day).into(iv_every_day);
+        Glide.with(this).load(R.drawable.bg_todo).into(iv_todo);
 //        Glide.with(this).load(R.drawable.bg_schedule).into(iv_schedule);
         iv_constellation.setOnClickListener(this);
         iv_health.setOnClickListener(this);
         iv_weibo.setOnClickListener(this);
+        iv_todo.setOnClickListener(this);
 //        iv_schedule.setOnClickListener(this);
 
         //设置底部弹窗
@@ -222,12 +227,27 @@ public class MainActivity extends AppCompatActivity
                                     Intent ocrIntent = new Intent(MainActivity.this, OCRActivity.class);
                                     startActivity(ocrIntent);
                                     break;
+                                case 2:
+                                    Intent eipIntent = new Intent(MainActivity.this, EipActivity.class);
+                                    startActivity(eipIntent);
+                                    break;
+                                case 3:
+                                    Intent translateIntent = new Intent(MainActivity.this, TranslateActivity.class);
+                                    startActivity(translateIntent);
+                                    break;
+                                case 4:
+
+                                    break;
+                                case 5:
+                                    normalDialoThreeBtn();
+                                    break;
                             }
                         }
                     })
                     .imagePadding(new Rect(25, 25, 25, 25))
                     .normalImageRes(getImageResource())
                     .normalText(getext())
+                    .textTopMargin(15)
                     .textSize(15);
             boomMenuButton.addBuilder(builder);
         }
@@ -239,7 +259,7 @@ public class MainActivity extends AppCompatActivity
 
     }
 
-    private static String[] text = new String[]{"快递查询", "文字识别", "表情包制作", "4444", "555545"
+    private static String[] text = new String[]{"快递查询", "文字识别", "表情包制作", "在线翻译", "纪念日", "在线识图", "7777", "88888", "99999"
 
     };
     private static int imageResourceIndex = 0;
@@ -253,9 +273,53 @@ public class MainActivity extends AppCompatActivity
             R.drawable.ic_menu_ems,
             R.drawable.ic_menu_ocr,
             R.drawable.ic_menu_eip,
-            R.drawable.ic_menu_grade,
-            R.drawable.ic_menu_library
+            R.drawable.ic_menu_translate,
+            R.drawable.ic_menu_library,
+            R.drawable.ic_menu_shitu,
+            R.drawable.ic_menu_eip,
+            R.drawable.ic_menu_eip,
+            R.drawable.ic_menu_eip
     };
+
+    //弹出包含三个按钮的dialog
+    private void normalDialoThreeBtn() {
+        final NormalDialog dialog = new NormalDialog(MainActivity.this);
+        dialog.content("请选择你的识图方式~")//
+                .style(NormalDialog.STYLE_TWO)//
+                .btnNum(3)
+                .btnText("按图查找", "按关键字查找", "关闭")//
+                .showAnim(new SlideBottomEnter())//
+                .show();
+
+        dialog.setOnBtnClickL(
+                new OnBtnClickL() {
+                    @Override
+                    public void onBtnClick() {
+                        //左边按钮
+                        Intent shituIntent = new Intent(MainActivity.this, ShiTuActivity.class);
+                        shituIntent.putExtra("type", "picture");
+                        startActivityForResult(shituIntent, 1);
+                        dialog.dismiss();
+                    }
+                },
+                new OnBtnClickL() {
+                    @Override
+                    public void onBtnClick() {
+                        //右边按钮
+                        Intent shituIntent = new Intent(MainActivity.this, ShiTuActivity.class);
+                        shituIntent.putExtra("type", "keywords");
+                        startActivityForResult(shituIntent, 1);
+                        dialog.dismiss();
+                    }
+                },
+                new OnBtnClickL() {
+                    @Override
+                    public void onBtnClick() {
+                        //中间按钮
+                        dialog.dismiss();
+                    }
+                });
+    }
 
     //改变图片的亮度方法 0--原样  >0---调亮  <0---调暗
     private void changeLight(ImageView imageView, int brightness) {
@@ -460,9 +524,8 @@ public class MainActivity extends AppCompatActivity
             case R.id.nav_library:
                 Toast.makeText(MainActivity.this, "你点击了馆藏查询按钮", Toast.LENGTH_SHORT).show();
                 break;
-            case R.id.nav_myday:
-                Intent to_do_intent = new Intent(MainActivity.this, ToDoActivity.class);
-                startActivity(to_do_intent);
+            case R.id.nav_pe:
+                Toast.makeText(MainActivity.this, "你点击了体育课查询按钮", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.nav_setting:
                 Intent settings_intent = new Intent(MainActivity.this, SettingsActivity.class);
@@ -529,6 +592,10 @@ public class MainActivity extends AppCompatActivity
                             })
                             .show();
                 }
+                break;
+            case R.id.iv_todo:
+                Intent todoIntent = new Intent(MainActivity.this, ToDoActivity.class);
+                startActivity(todoIntent);
                 break;
         }
     }
