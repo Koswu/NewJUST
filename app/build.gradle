@@ -64,5 +64,7 @@ dependencies {
     compile 'com.nightonke:boommenu:2.1.1'
     compile 'com.github.d-max:spots-dialog:0.7@aar'
     compile 'com.roger.catloadinglibrary:catloadinglibrary:1.0.1'
+    compile 'com.mxn.soul:flowingdrawer-core:2.0.0'
+    compile 'com.nineoldandroids:library:2.4.0'
     testCompile 'junit:junit:4.12'
 }

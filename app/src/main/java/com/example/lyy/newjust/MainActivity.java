@@ -17,6 +17,7 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.ViewDragHelper;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -35,6 +36,8 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.lyy.newjust.gson.Weather;
 import com.example.lyy.newjust.util.HttpUtil;
 import com.example.lyy.newjust.util.Util;
+import com.mxn.soul.flowingdrawer_core.ElasticDrawer;
+import com.mxn.soul.flowingdrawer_core.FlowingDrawer;
 import com.nightonke.boommenu.BoomButtons.OnBMClickListener;
 import com.nightonke.boommenu.BoomButtons.TextOutsideCircleButton;
 import com.nightonke.boommenu.BoomMenuButton;
@@ -69,6 +72,8 @@ public class MainActivity extends AppCompatActivity
 
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor editor;
+
+    private FlowingDrawer mDrawer;
 
     private String constellation_en;
 
@@ -153,6 +158,12 @@ public class MainActivity extends AppCompatActivity
 
         //设置和toolbar相关的
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setHomeAsUpIndicator(R.drawable.ic_menu_menu);
+        }
         collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
         collapsingToolbarLayout.setTitle("New JUST");
 
@@ -178,16 +189,26 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
-        setSupportActionBar(toolbar);
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
-        toggle.syncState();
-        setDrawerLeftEdgeSize(MainActivity.this, drawer, (float) 0.3);
+        mDrawer = (FlowingDrawer) findViewById(R.id.drawerlayout);
+        mDrawer.setTouchMode(ElasticDrawer.TOUCH_MODE_BEZEL);
+//        mDrawer.setOnDrawerStateChangeListener(new ElasticDrawer.OnDrawerStateChangeListener() {
+//            @Override
+//            public void onDrawerStateChange(int oldState, int newState) {
+//                if (newState == ElasticDrawer.STATE_CLOSED) {
+//                    Log.i("MainActivity", "Drawer STATE_CLOSED");
+//                } else if (newState == ElasticDrawer.STATE_OPEN) {
+//                    Log.i("MainActivity", "Drawer STATE_OPEN");
+//                }
+//            }
+//
+//            @Override
+//            public void onDrawerSlide(float openRatio, int offsetPixels) {
+//                //Log.i("MainActivity", "openRatio=" + openRatio + " ,offsetPixels=" + offsetPixels);
+//            }
+//        });
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        //navigationView.setBackground(getResources().getDrawable(R.drawable.bg_our));
         navigationView.setNavigationItemSelectedListener(this);
 
         requestWeather();
@@ -199,6 +220,7 @@ public class MainActivity extends AppCompatActivity
         ImageView iv_every_day = (ImageView) findViewById(R.id.iv_every_day);
         ImageView iv_memory = (ImageView) findViewById(R.id.iv_memory);
         ImageView iv_history = (ImageView) findViewById(R.id.iv_history);
+
         Glide.with(this).load(R.drawable.bg_constellation).into(iv_constellation);
         Glide.with(this).load(R.drawable.bg_health).into(iv_health);
         Glide.with(this).load(R.drawable.bg_weibo).into(iv_weibo);
@@ -206,6 +228,7 @@ public class MainActivity extends AppCompatActivity
         Glide.with(this).load(R.drawable.bg_memory).into(iv_memory);
         Glide.with(this).load(R.drawable.bg_schedule).into(iv_schedule);
         Glide.with(this).load(R.drawable.bg_history).into(iv_history);
+
         iv_constellation.setOnClickListener(this);
         iv_health.setOnClickListener(this);
         iv_weibo.setOnClickListener(this);
@@ -322,7 +345,6 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-
     //发送查询天气的请求
     private void requestWeather() {
         String weatherUrl = "https://free-api.heweather.com/v5/weather?city=CN101190301&key=38c845e8310644ee83a8a7bba9b9be64";
@@ -434,16 +456,6 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
-        } else {
-            super.onBackPressed();
-        }
-    }
-
-    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
@@ -466,6 +478,9 @@ public class MainActivity extends AppCompatActivity
             case R.id.action_exit:
                 this.finish();
                 break;
+            case android.R.id.home:
+                mDrawer.openMenu();
+                break;
         }
 
         return super.onOptionsItemSelected(item);
@@ -475,6 +490,8 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
+
+        mDrawer.closeMenu();
 
         switch (item.getItemId()) {
             case R.id.nav_grade:
@@ -499,8 +516,6 @@ public class MainActivity extends AppCompatActivity
                 break;
         }
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
         return true;
     }
 
@@ -560,7 +575,8 @@ public class MainActivity extends AppCompatActivity
                 Toast.makeText(MainActivity.this, "课程表", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.iv_history:
-                Toast.makeText(MainActivity.this, "历史上的今天", Toast.LENGTH_SHORT).show();
+                Intent historyIntent = new Intent(MainActivity.this, HistoryActivity.class);
+                startActivity(historyIntent);
                 break;
             case R.id.iv_weibo:
                 Toast.makeText(MainActivity.this, "今日糗事", Toast.LENGTH_SHORT).show();
