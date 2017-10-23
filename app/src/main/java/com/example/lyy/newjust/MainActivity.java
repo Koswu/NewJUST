@@ -121,7 +121,8 @@ public class MainActivity extends AppCompatActivity
                 .requestCode(200)
                 .permission(
                         Permission.STORAGE,
-                        Permission.CAMERA
+                        Permission.CAMERA,
+                        Permission.MICROPHONE
                 )
                 .callback(listener)
                 .start();
@@ -236,10 +237,13 @@ public class MainActivity extends AppCompatActivity
                                     startActivity(translateIntent);
                                     break;
                                 case 4:
-
                                     break;
                                 case 5:
                                     normalDialoThreeBtn();
+                                    break;
+                                case 6:
+                                    Intent audioIntent = new Intent(MainActivity.this, AudioActivity.class);
+                                    startActivity(audioIntent);
                                     break;
                             }
                         }
@@ -259,7 +263,7 @@ public class MainActivity extends AppCompatActivity
 
     }
 
-    private static String[] text = new String[]{"快递查询", "文字识别", "表情包制作", "在线翻译", "纪念日", "在线识图", "7777", "88888", "99999"
+    private static String[] text = new String[]{"快递查询", "文字识别", "表情包制作", "在线翻译", "纪念日", "在线识图", "分贝计", "88888", "99999"
 
     };
     private static int imageResourceIndex = 0;

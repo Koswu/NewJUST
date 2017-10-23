@@ -8,9 +8,7 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.SET_WALLPAPER" />
-    <uses-permission
-        android:name="android.permission.INJECT_EVENTS"
-        tools:ignore="ProtectedPermissions" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
 
     <application
         android:name="org.litepal.LitePalApplication"
@@ -42,7 +40,8 @@
         <activity android:name=".OCRActivity" />
         <activity android:name=".EipActivity" />
         <activity android:name=".TranslateActivity" />
-        <activity android:name=".ShiTuActivity"></activity>
+        <activity android:name=".ShiTuActivity" />
+        <activity android:name=".AudioActivity"></activity>
     </application>
 
 </manifest>
