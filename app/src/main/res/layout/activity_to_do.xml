@@ -21,7 +21,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:fitsSystemWindows="true"
-            android:text="我 的 一 天"
+            android:text="待 办 事 项"
             android:textColor="@android:color/white"
             android:textSize="20sp" />
 

@@ -40,7 +40,6 @@
         <activity android:name=".OCRActivity" />
         <activity android:name=".EipActivity" />
         <activity android:name=".TranslateActivity" />
-        <activity android:name=".ShiTuActivity" />
         <activity android:name=".AudioActivity"></activity>
     </application>
 

@@ -27,6 +27,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
@@ -34,9 +35,6 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.lyy.newjust.gson.Weather;
 import com.example.lyy.newjust.util.HttpUtil;
 import com.example.lyy.newjust.util.Util;
-import com.flyco.animation.SlideEnter.SlideBottomEnter;
-import com.flyco.dialog.listener.OnBtnClickL;
-import com.flyco.dialog.widget.NormalDialog;
 import com.nightonke.boommenu.BoomButtons.OnBMClickListener;
 import com.nightonke.boommenu.BoomButtons.TextOutsideCircleButton;
 import com.nightonke.boommenu.BoomMenuButton;
@@ -187,7 +185,7 @@ public class MainActivity extends AppCompatActivity
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
-        setDrawerLeftEdgeSize(MainActivity.this, drawer, (float) 0.2);
+        setDrawerLeftEdgeSize(MainActivity.this, drawer, (float) 0.3);
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
@@ -199,20 +197,32 @@ public class MainActivity extends AppCompatActivity
         ImageView iv_weibo = (ImageView) findViewById(R.id.iv_weibo);
         ImageView iv_schedule = (ImageView) findViewById(R.id.iv_schedule);
         ImageView iv_every_day = (ImageView) findViewById(R.id.iv_every_day);
-        ImageView iv_todo = (ImageView) findViewById(R.id.iv_todo);
+        ImageView iv_memory = (ImageView) findViewById(R.id.iv_memory);
+        ImageView iv_history = (ImageView) findViewById(R.id.iv_history);
         Glide.with(this).load(R.drawable.bg_constellation).into(iv_constellation);
         Glide.with(this).load(R.drawable.bg_health).into(iv_health);
         Glide.with(this).load(R.drawable.bg_weibo).into(iv_weibo);
         Glide.with(this).load(R.drawable.bg_every_day).into(iv_every_day);
-        Glide.with(this).load(R.drawable.bg_todo).into(iv_todo);
-//        Glide.with(this).load(R.drawable.bg_schedule).into(iv_schedule);
+        Glide.with(this).load(R.drawable.bg_memory).into(iv_memory);
+        Glide.with(this).load(R.drawable.bg_schedule).into(iv_schedule);
+        Glide.with(this).load(R.drawable.bg_history).into(iv_history);
         iv_constellation.setOnClickListener(this);
         iv_health.setOnClickListener(this);
         iv_weibo.setOnClickListener(this);
-        iv_todo.setOnClickListener(this);
-//        iv_schedule.setOnClickListener(this);
+        iv_memory.setOnClickListener(this);
+        iv_schedule.setOnClickListener(this);
+        iv_history.setOnClickListener(this);
+
+        LinearLayout nav_todo = (LinearLayout) findViewById(R.id.nav_todo);
+        nav_todo.setOnClickListener(this);
+
 
         //设置底部弹窗
+        showBoomMenu();
+    }
+
+    //设置底部弹窗按钮
+    private void showBoomMenu() {
         BoomMenuButton boomMenuButton = (BoomMenuButton) findViewById(R.id.bmb);
         for (int i = 0; i < boomMenuButton.getPiecePlaceEnum().pieceNumber(); i++) {
             TextOutsideCircleButton.Builder builder = new TextOutsideCircleButton.Builder()
@@ -237,11 +247,6 @@ public class MainActivity extends AppCompatActivity
                                     startActivity(translateIntent);
                                     break;
                                 case 4:
-                                    break;
-                                case 5:
-                                    normalDialoThreeBtn();
-                                    break;
-                                case 6:
                                     Intent audioIntent = new Intent(MainActivity.this, AudioActivity.class);
                                     startActivity(audioIntent);
                                     break;
@@ -251,8 +256,8 @@ public class MainActivity extends AppCompatActivity
                     .imagePadding(new Rect(25, 25, 25, 25))
                     .normalImageRes(getImageResource())
                     .normalText(getext())
-                    .textTopMargin(15)
-                    .textSize(15);
+                    .textTopMargin(10)
+                    .textSize(12);
             boomMenuButton.addBuilder(builder);
         }
     }
@@ -263,9 +268,7 @@ public class MainActivity extends AppCompatActivity
 
     }
 
-    private static String[] text = new String[]{"快递查询", "文字识别", "表情包制作", "在线翻译", "纪念日", "在线识图", "分贝计", "88888", "99999"
-
-    };
+    private static String[] text = new String[]{"快递查询", "文字识别", "表情包制作", "在线翻译", "分贝计"};
     private static int imageResourceIndex = 0;
 
     static int getImageResource() {
@@ -279,51 +282,7 @@ public class MainActivity extends AppCompatActivity
             R.drawable.ic_menu_eip,
             R.drawable.ic_menu_translate,
             R.drawable.ic_menu_library,
-            R.drawable.ic_menu_shitu,
-            R.drawable.ic_menu_eip,
-            R.drawable.ic_menu_eip,
-            R.drawable.ic_menu_eip
     };
-
-    //弹出包含三个按钮的dialog
-    private void normalDialoThreeBtn() {
-        final NormalDialog dialog = new NormalDialog(MainActivity.this);
-        dialog.content("请选择你的识图方式~")//
-                .style(NormalDialog.STYLE_TWO)//
-                .btnNum(3)
-                .btnText("按图查找", "按关键字查找", "关闭")//
-                .showAnim(new SlideBottomEnter())//
-                .show();
-
-        dialog.setOnBtnClickL(
-                new OnBtnClickL() {
-                    @Override
-                    public void onBtnClick() {
-                        //左边按钮
-                        Intent shituIntent = new Intent(MainActivity.this, ShiTuActivity.class);
-                        shituIntent.putExtra("type", "picture");
-                        startActivityForResult(shituIntent, 1);
-                        dialog.dismiss();
-                    }
-                },
-                new OnBtnClickL() {
-                    @Override
-                    public void onBtnClick() {
-                        //右边按钮
-                        Intent shituIntent = new Intent(MainActivity.this, ShiTuActivity.class);
-                        shituIntent.putExtra("type", "keywords");
-                        startActivityForResult(shituIntent, 1);
-                        dialog.dismiss();
-                    }
-                },
-                new OnBtnClickL() {
-                    @Override
-                    public void onBtnClick() {
-                        //中间按钮
-                        dialog.dismiss();
-                    }
-                });
-    }
 
     //改变图片的亮度方法 0--原样  >0---调亮  <0---调暗
     private void changeLight(ImageView imageView, int brightness) {
@@ -504,9 +463,6 @@ public class MainActivity extends AppCompatActivity
             case R.id.action_donate:
                 Toast.makeText(MainActivity.this, "你点击了支持捐赠按钮", Toast.LENGTH_SHORT).show();
                 break;
-            case R.id.action_bg:
-                Toast.makeText(MainActivity.this, "你点击了更换背景按钮", Toast.LENGTH_SHORT).show();
-                break;
             case R.id.action_exit:
                 this.finish();
                 break;
@@ -597,7 +553,22 @@ public class MainActivity extends AppCompatActivity
                             .show();
                 }
                 break;
-            case R.id.iv_todo:
+            case R.id.iv_memory:
+                Toast.makeText(MainActivity.this, "最美时光", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.iv_schedule:
+                Toast.makeText(MainActivity.this, "课程表", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.iv_history:
+                Toast.makeText(MainActivity.this, "历史上的今天", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.iv_weibo:
+                Toast.makeText(MainActivity.this, "今日糗事", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.iv_every_day:
+                Toast.makeText(MainActivity.this, "每日一句", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.nav_todo:
                 Intent todoIntent = new Intent(MainActivity.this, ToDoActivity.class);
                 startActivity(todoIntent);
                 break;
