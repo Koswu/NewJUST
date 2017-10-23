@@ -53,6 +53,7 @@
                     android:textColor="@color/material_black_1000" />
 
                 <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/civ_header"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_gravity="end|center_vertical"
@@ -247,5 +248,6 @@
         </LinearLayout>
 
     </ScrollView>
+
 
 </LinearLayout>

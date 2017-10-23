@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.ColorMatrix;
 import android.graphics.ColorMatrixColorFilter;
@@ -21,6 +23,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Base64;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -49,11 +52,13 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.List;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
+import de.hdodenhof.circleimageview.CircleImageView;
 import dmax.dialog.SpotsDialog;
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -66,9 +71,13 @@ public class MainActivity extends AppCompatActivity
 
     private String headPicUrl;
 
+    private String imageBase64;
+
     private CollapsingToolbarLayout collapsingToolbarLayout;
 
     private ImageView head_image_view;
+
+    private CircleImageView civ_header;
 
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor editor;
@@ -212,6 +221,17 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         requestWeather();
+
+        //设置菜单栏头像
+        imageBase64 = sharedPreferences.getString("image", null);
+        civ_header = (CircleImageView) findViewById(R.id.civ_header);
+        civ_header.setOnClickListener(this);
+        if (imageBase64 != null) {
+            byte[] byte64 = Base64.decode(imageBase64, 0);
+            ByteArrayInputStream bais = new ByteArrayInputStream(byte64);
+            Bitmap bitmap = BitmapFactory.decodeStream(bais);
+            civ_header.setImageBitmap(bitmap);
+        }
 
         ImageView iv_constellation = (ImageView) findViewById(R.id.iv_constellation);
         ImageView iv_health = (ImageView) findViewById(R.id.iv_health);
@@ -519,10 +539,6 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-    }
 
     //点击两次返回键退出
     @Override
@@ -545,6 +561,9 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
+            case R.id.civ_header:
+                Toast.makeText(MainActivity.this, "请到设置中设置你的头像", Toast.LENGTH_SHORT).show();
+                break;
             case R.id.iv_constellation:
                 constellation_en = sharedPreferences.getString("constellation_en", null);
                 if (constellation_en != null) {
@@ -588,6 +607,19 @@ public class MainActivity extends AppCompatActivity
                 Intent todoIntent = new Intent(MainActivity.this, ToDoActivity.class);
                 startActivity(todoIntent);
                 break;
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        imageBase64 = sharedPreferences.getString("image", null);
+        Log.d(TAG, "onResume: " + imageBase64);
+        if (imageBase64 != null) {
+            byte[] byte64 = Base64.decode(imageBase64, 0);
+            ByteArrayInputStream bais = new ByteArrayInputStream(byte64);
+            Bitmap bitmap = BitmapFactory.decodeStream(bais);
+            civ_header.setImageBitmap(bitmap);
         }
     }
 

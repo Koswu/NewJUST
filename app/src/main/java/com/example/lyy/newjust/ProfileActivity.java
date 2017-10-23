@@ -1,25 +1,52 @@
 package com.example.lyy.newjust;
 
 import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
 import android.app.DatePickerDialog;
+import android.content.ContentUris;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
+import android.os.Build;
+import android.os.Bundle;
+import android.provider.DocumentsContract;
+import android.provider.MediaStore;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Base64;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.DatePicker;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.flyco.dialog.listener.OnOperItemClickL;
+import com.flyco.dialog.widget.ActionSheetDialog;
+
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.IOException;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 import es.dmoral.toasty.Toasty;
 
 public class ProfileActivity extends AppCompatActivity implements View.OnClickListener {
 
     private static final String TAG = "ProfileActivity";
+
+    public static final int TAKE_PHOTO = 1;
+    public static final int CHOOSE_PHOTO = 2;
+
+
+    private Uri imageUri;
 
     private TextView tv_constellation;
     private TextView tv_birthday;
@@ -31,6 +58,10 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     private String constellation;
     private String constellation_en;
     private int year, month, day;
+
+    private String imageBase64;
+
+    private CircleImageView civ_header;
 
 
     @Override
@@ -61,6 +92,8 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         month = sharedPreferences.getInt("month", 12);
         day = sharedPreferences.getInt("day", 1);
 
+        imageBase64 = sharedPreferences.getString("image", null);
+
         LinearLayout ll_birthday = (LinearLayout) findViewById(R.id.ll_birthday);
         LinearLayout ll_constellation = (LinearLayout) findViewById(R.id.ll_constellation);
         ll_birthday.setOnClickListener(this);
@@ -73,6 +106,44 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
             tv_birthday.setText(birthday);
         if (constellation != null)
             tv_constellation.setText(constellation);
+
+        civ_header = (CircleImageView) findViewById(R.id.civ_header);
+        civ_header.setOnClickListener(this);
+        if (imageBase64 != null) {
+            byte[] byte64 = Base64.decode(imageBase64, 0);
+            ByteArrayInputStream bais = new ByteArrayInputStream(byte64);
+            Bitmap bitmap = BitmapFactory.decodeStream(bais);
+            civ_header.setImageBitmap(bitmap);
+        }
+
+    }
+
+    private void take_photos() {
+        // 创建File对象，用于存储拍照后的图片
+        File outputImage = new File(getExternalCacheDir(), "output_image.jpg");
+        try {
+            if (outputImage.exists()) {
+                outputImage.delete();
+            }
+            outputImage.createNewFile();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        if (Build.VERSION.SDK_INT < 24) {
+            imageUri = Uri.fromFile(outputImage);
+        } else {
+            imageUri = FileProvider.getUriForFile(ProfileActivity.this, "com.example.lyy.newjust.fileprovider", outputImage);
+        }
+        // 启动相机程序
+        Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
+        startActivityForResult(intent, TAKE_PHOTO);
+    }
+
+    private void choosePhotoFromGallery() {
+        Intent intent = new Intent("android.intent.action.GET_CONTENT");
+        intent.setType("image/*");
+        startActivityForResult(intent, CHOOSE_PHOTO); // 打开相册
     }
 
     //显示时间选择弹窗
@@ -127,6 +198,41 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode) {
+            case TAKE_PHOTO:
+                if (resultCode == RESULT_OK) {
+                    try {
+                        // 将拍摄的照片显示出来
+                        Intent cropIntent = new Intent(ProfileActivity.this, CropViewActivity.class);
+                        cropIntent.putExtra("uri", imageUri.toString());
+                        startActivity(cropIntent);
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+                break;
+            case CHOOSE_PHOTO:
+                if (resultCode == RESULT_OK) {
+                    // 判断手机系统版本号
+                    if (Build.VERSION.SDK_INT >= 19) {
+                        // 4.4及以上系统使用这个方法处理图片
+                        Uri uri = data.getData();
+                        Intent cropIntent = new Intent(ProfileActivity.this, CropViewActivity.class);
+                        cropIntent.putExtra("uri", uri.toString());
+                        startActivity(cropIntent);
+                    } else {
+                        Toast.makeText(ProfileActivity.this, "安卓版本过低", Toast.LENGTH_SHORT).show();
+                    }
+                }
+                break;
+            default:
+                break;
+        }
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
@@ -146,8 +252,39 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                 if (tv_constellation.getText().equals(""))
                     Toasty.warning(ProfileActivity.this, "你还未设置星座，点击生日设置", Toast.LENGTH_SHORT).show();
                 break;
+            case R.id.civ_header:
+                final String[] stringItems = {"拍照", "从相册中选择"};
+                final ActionSheetDialog dialog = new ActionSheetDialog(ProfileActivity.this, stringItems, null);
+                dialog.isTitleShow(false).show();
+
+                dialog.setOnOperItemClickL(new OnOperItemClickL() {
+                    @Override
+                    public void onOperItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        switch (position) {
+                            case 0:
+                                take_photos();
+                                break;
+                            case 1:
+                                choosePhotoFromGallery();
+                                break;
+                        }
+                        dialog.dismiss();
+                    }
+                });
+                break;
         }
     }
 
-
+    @Override
+    protected void onResume() {
+        super.onResume();
+        imageBase64 = sharedPreferences.getString("image", null);
+        Log.d(TAG, "onResume: " + imageBase64);
+        if (imageBase64 != null) {
+            byte[] byte64 = Base64.decode(imageBase64, 0);
+            ByteArrayInputStream bais = new ByteArrayInputStream(byte64);
+            Bitmap bitmap = BitmapFactory.decodeStream(bais);
+            civ_header.setImageBitmap(bitmap);
+        }
+    }
 }

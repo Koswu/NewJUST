@@ -66,5 +66,6 @@ dependencies {
     compile 'com.roger.catloadinglibrary:catloadinglibrary:1.0.1'
     compile 'com.mxn.soul:flowingdrawer-core:2.0.0'
     compile 'com.nineoldandroids:library:2.4.0'
+    compile 'com.oginotihiro:cropview:1.0.0'
     testCompile 'junit:junit:4.12'
 }
