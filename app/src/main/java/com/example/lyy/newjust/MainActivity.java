@@ -282,16 +282,16 @@ public class MainActivity extends AppCompatActivity
                                     startActivity(ocrIntent);
                                     break;
                                 case 2:
-                                    Intent eipIntent = new Intent(MainActivity.this, EipActivity.class);
-                                    startActivity(eipIntent);
+                                    Intent audioIntent = new Intent(MainActivity.this, AudioActivity.class);
+                                    startActivity(audioIntent);
                                     break;
                                 case 3:
                                     Intent translateIntent = new Intent(MainActivity.this, TranslateActivity.class);
                                     startActivity(translateIntent);
                                     break;
                                 case 4:
-                                    Intent audioIntent = new Intent(MainActivity.this, AudioActivity.class);
-                                    startActivity(audioIntent);
+                                    Intent eipIntent = new Intent(MainActivity.this, EipActivity.class);
+                                    startActivity(eipIntent);
                                     break;
                             }
                         }
@@ -311,7 +311,7 @@ public class MainActivity extends AppCompatActivity
 
     }
 
-    private static String[] text = new String[]{"快递查询", "文字识别", "表情包制作", "在线翻译", "分贝计"};
+    private static String[] text = new String[]{"快递查询", "文字识别", "分贝计", "在线翻译", "表情包制作"};
     private static int imageResourceIndex = 0;
 
     static int getImageResource() {

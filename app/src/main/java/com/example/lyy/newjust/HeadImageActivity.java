@@ -53,6 +53,12 @@ public class HeadImageActivity extends DraggerActivity {
         String headPicUrl = intent.getStringExtra("headPicUrl");
 
         bg_imageview = (ImageView) findViewById(R.id.bg_imageView);
+        bg_imageview.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                draggerView.closeActivity();
+            }
+        });
         bg_imageview.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {

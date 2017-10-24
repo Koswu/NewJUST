@@ -67,6 +67,15 @@ public class ToDoActivity extends SwipeBackActivity implements BatListener, OnIt
         // 滑动退出的效果只能从边界滑动才有效果，如果要扩大touch的范围，可以调用这个方法
         mSwipeBackLayout.setEdgeSize(200);
 
+        //设置和toolbar相关的
+        Toolbar toolbar = (Toolbar) findViewById(R.id.todo_toolbar);
+        setSupportActionBar(toolbar);
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setDisplayShowTitleEnabled(false);
+        }
+
         toDos = new ArrayList<>();
 
         ((TextView) findViewById(R.id.text_title)).setTypeface(TypefaceUtil.getAvenirTypeface(this));
@@ -105,6 +114,16 @@ public class ToDoActivity extends SwipeBackActivity implements BatListener, OnIt
     }
 
     @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                this.finish();
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
     public void add(String string) {
         mGoals.add(0, new Goal(string));
         Log.d(TAG, "add: " + mGoals.size());
@@ -136,7 +155,7 @@ public class ToDoActivity extends SwipeBackActivity implements BatListener, OnIt
 
     @Override
     public void onClick(BatModel item, int position) {
-        if (item.getText().length()>15){
+        if (item.getText().length() > 15) {
             Toast.makeText(this, item.getText(), Toast.LENGTH_SHORT).show();
         }
     }

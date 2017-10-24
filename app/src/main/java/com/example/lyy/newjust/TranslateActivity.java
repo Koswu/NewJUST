@@ -27,8 +27,15 @@ public class TranslateActivity extends SwipeBackActivity {
 
         webView = (WebView) findViewById(R.id.translate_web_view);
         webView.getSettings().setJavaScriptEnabled(true);
-        webView.setWebViewClient(new WebViewClient());
-        webView.loadUrl("https://translate.google.cn/");
+        webView.setWebViewClient(new WebViewClient() {
+            @Override
+            public void onPageFinished(WebView view, String url) {
+                super.onPageFinished(view, url);
+                String script = "document.getElementsByClassName(\"img-w index-red\")[0].remove()";
+                view.loadUrl("javascript:"+script);
+            }
+        });
+        webView.loadUrl("http://m.iciba.com");
     }
 
     @Override
@@ -39,4 +46,6 @@ public class TranslateActivity extends SwipeBackActivity {
         }
         return super.onKeyDown(keyCode, event);
     }
+
+
 }
