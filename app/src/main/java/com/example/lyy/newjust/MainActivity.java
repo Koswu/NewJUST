@@ -379,6 +379,7 @@ public class MainActivity extends AppCompatActivity
                 String responseText = response.body().string();
                 Log.d(TAG, "onResponse: " + responseText);
                 if (response.isSuccessful()) {
+                    Log.d(TAG, "onResponse: "+responseText);
                     Weather weather = Util.handleWeatherResponse(responseText);
                     parseWeatherData(weather);
                 } else {
@@ -562,7 +563,8 @@ public class MainActivity extends AppCompatActivity
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.civ_header:
-                Toast.makeText(MainActivity.this, "请到设置中设置你的头像", Toast.LENGTH_SHORT).show();
+                Intent profileIntent = new Intent(MainActivity.this, ProfileActivity.class);
+                startActivity(profileIntent);
                 break;
             case R.id.iv_constellation:
                 constellation_en = sharedPreferences.getString("constellation_en", null);

@@ -1,5 +1,7 @@
 package com.example.lyy.newjust;
 
+import android.graphics.Color;
+import android.os.Handler;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -10,6 +12,7 @@ import android.view.MenuItem;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
+import jp.co.recruit_lifestyle.android.widget.WaveSwipeRefreshLayout;
 import me.imid.swipebacklayout.lib.SwipeBackLayout;
 import me.imid.swipebacklayout.lib.app.SwipeBackActivity;
 
@@ -18,12 +21,16 @@ public class HistoryActivity extends SwipeBackActivity {
 
     private WebView webView;
 
+    private WaveSwipeRefreshLayout mWaveSwipeRefreshLayout;
+
+    private String url;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_history);
 
-        String url = "http://120.25.88.41/lishi/index.html";
+        url = "http://120.25.88.41/lishi/index.html";
 
         setSwipeBackEnable(true);   // 可以调用该方法，设置是否允许滑动退出
         SwipeBackLayout mSwipeBackLayout = getSwipeBackLayout();
@@ -45,6 +52,26 @@ public class HistoryActivity extends SwipeBackActivity {
         webView.getSettings().setJavaScriptEnabled(true);
         webView.setWebViewClient(new WebViewClient());
         webView.loadUrl(url);
+
+        mWaveSwipeRefreshLayout = (WaveSwipeRefreshLayout) findViewById(R.id.history_swipe);
+        //设置转的圈的颜色
+        mWaveSwipeRefreshLayout.setColorSchemeColors(Color.WHITE, Color.WHITE);
+        //设置水波纹的颜色
+        mWaveSwipeRefreshLayout.setWaveColor(Color.rgb(0, 172, 193));
+        mWaveSwipeRefreshLayout.setOnRefreshListener(new WaveSwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                // Do work to refresh the list here.
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        webView.loadUrl(url);
+                        mWaveSwipeRefreshLayout.setRefreshing(false);
+                    }
+                }, 3000);
+
+            }
+        });
     }
 
     @Override
