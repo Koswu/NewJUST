@@ -67,6 +67,7 @@ dependencies {
     compile 'com.nineoldandroids:library:2.4.0'
     compile 'com.oginotihiro:cropview:1.0.0'
     compile 'com.github.recruit-lifestyle:WaveSwipeRefreshLayout:1.6'
+    compile 'com.github.paolorotolo:appintro:3.4.0'
     testCompile 'junit:junit:4.12'
     compile project(path: ':library')
 }

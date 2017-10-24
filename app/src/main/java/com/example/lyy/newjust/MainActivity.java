@@ -37,7 +37,9 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.lyy.newjust.gson.Weather;
+import com.example.lyy.newjust.util.AppConstants;
 import com.example.lyy.newjust.util.HttpUtil;
+import com.example.lyy.newjust.util.SpUtils;
 import com.example.lyy.newjust.util.Util;
 import com.mxn.soul.flowingdrawer_core.ElasticDrawer;
 import com.mxn.soul.flowingdrawer_core.FlowingDrawer;
@@ -97,6 +99,18 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // 判断是否是第一次开启应用
+        boolean isFirstOpen = SpUtils.getBoolean(this, AppConstants.FIRST_OPEN);
+        Log.d(TAG, "onCreate: " + isFirstOpen);
+        // 如果是第一次启动，则先进入功能引导页
+        if (!isFirstOpen) {
+            Intent intent = new Intent(MainActivity.this, WelcomeActivity.class);
+            startActivity(intent);
+            finish();
+            return;
+        }
+
         setContentView(R.layout.activity_main);
 
         //设置状态栏和toolbar颜色一致
@@ -379,7 +393,7 @@ public class MainActivity extends AppCompatActivity
                 String responseText = response.body().string();
                 Log.d(TAG, "onResponse: " + responseText);
                 if (response.isSuccessful()) {
-                    Log.d(TAG, "onResponse: "+responseText);
+                    Log.d(TAG, "onResponse: " + responseText);
                     Weather weather = Util.handleWeatherResponse(responseText);
                     parseWeatherData(weather);
                 } else {
@@ -399,7 +413,6 @@ public class MainActivity extends AppCompatActivity
                 collapsingToolbarLayout.setTitle(degree + " " + weatherInfo);
             }
         });
-
     }
 
     //发送加载首页图片的请求
@@ -539,7 +552,6 @@ public class MainActivity extends AppCompatActivity
 
         return true;
     }
-
 
     //点击两次返回键退出
     @Override
