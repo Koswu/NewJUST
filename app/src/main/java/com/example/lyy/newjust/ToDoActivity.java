@@ -1,5 +1,7 @@
 package com.example.lyy.newjust;
 
+import android.appwidget.AppWidgetManager;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
@@ -51,7 +53,6 @@ public class ToDoActivity extends SwipeBackActivity implements BatListener, OnIt
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_to_do);
 
         //设置状态栏和toolbar颜色一致
@@ -113,10 +114,17 @@ public class ToDoActivity extends SwipeBackActivity implements BatListener, OnIt
         });
     }
 
+    //    刷新小部件
+    private void refreshWidget() {
+        Intent refresh_intent = new Intent("com.example.lyy.newjust.action.REFRESH_ACTION");
+        getApplicationContext().sendBroadcast(refresh_intent);
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
+                refreshWidget();
                 this.finish();
                 break;
         }
@@ -128,14 +136,15 @@ public class ToDoActivity extends SwipeBackActivity implements BatListener, OnIt
         mGoals.add(0, new Goal(string));
         Log.d(TAG, "add: " + mGoals.size());
         mAdapter.notify(AnimationType.ADD, 0);
+        refreshWidget();
     }
 
     @Override
     public void delete(int position) {
         mGoals.remove(position);
         Log.d(TAG, "delete: " + position);
-
         mAdapter.notify(AnimationType.REMOVE, position);
+        refreshWidget();
     }
 
     @Override
@@ -150,6 +159,7 @@ public class ToDoActivity extends SwipeBackActivity implements BatListener, OnIt
             if (from == 0 || to == 0) {
                 mRecyclerView.getView().scrollToPosition(Math.min(from, to));
             }
+            refreshWidget();
         }
     }
 
@@ -177,5 +187,6 @@ public class ToDoActivity extends SwipeBackActivity implements BatListener, OnIt
             todo.setFinished(mGoals.get(i).isChecked());
             todo.save();
         }
+        refreshWidget();
     }
 }
