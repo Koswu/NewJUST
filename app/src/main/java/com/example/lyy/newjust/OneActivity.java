@@ -6,7 +6,6 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.webkit.WebView;
@@ -16,8 +15,7 @@ import jp.co.recruit_lifestyle.android.widget.WaveSwipeRefreshLayout;
 import me.imid.swipebacklayout.lib.SwipeBackLayout;
 import me.imid.swipebacklayout.lib.app.SwipeBackActivity;
 
-public class HistoryActivity extends SwipeBackActivity {
-    private static final String TAG = "HistoryActivity";
+public class OneActivity extends SwipeBackActivity {
 
     private WebView webView;
 
@@ -28,9 +26,9 @@ public class HistoryActivity extends SwipeBackActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_history);
+        setContentView(R.layout.activity_one);
 
-        url = "http://120.25.88.41/oneDay/history/index.html";
+        url = "http://120.25.88.41/oneDay/one/index.html";
 
         setSwipeBackEnable(true);   // 可以调用该方法，设置是否允许滑动退出
         SwipeBackLayout mSwipeBackLayout = getSwipeBackLayout();
@@ -40,7 +38,7 @@ public class HistoryActivity extends SwipeBackActivity {
         mSwipeBackLayout.setEdgeSize(200);
 
         //设置和toolbar相关的
-        Toolbar toolbar = (Toolbar) findViewById(R.id.history_toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.one_toolbar);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
@@ -48,12 +46,12 @@ public class HistoryActivity extends SwipeBackActivity {
             actionBar.setDisplayShowTitleEnabled(false);
         }
 
-        webView = (WebView) findViewById(R.id.history_web_view);
+        webView = (WebView) findViewById(R.id.one_web_view);
         webView.getSettings().setJavaScriptEnabled(true);
         webView.setWebViewClient(new WebViewClient());
         webView.loadUrl(url);
 
-        mWaveSwipeRefreshLayout = (WaveSwipeRefreshLayout) findViewById(R.id.history_swipe);
+        mWaveSwipeRefreshLayout = (WaveSwipeRefreshLayout) findViewById(R.id.one_swipe);
         //设置转的圈的颜色
         mWaveSwipeRefreshLayout.setColorSchemeColors(Color.WHITE, Color.WHITE);
         //设置水波纹的颜色

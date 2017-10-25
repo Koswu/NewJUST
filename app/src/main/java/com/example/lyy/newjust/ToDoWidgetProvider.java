@@ -60,6 +60,11 @@ public class ToDoWidgetProvider extends AppWidgetProvider {
         clickIntent.setAction(clickAction);
         clickIntent.setData(Uri.parse(clickIntent.toUri(Intent.URI_INTENT_SCHEME)));
 
+        //点击头部跳转到页面内
+        Intent skipIntent = new Intent(context, ToDoActivity.class);
+        PendingIntent pi = PendingIntent.getActivity(context, 200, skipIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+        remoteViews.setOnClickPendingIntent(R.id.tv_widget, pi);
+
         PendingIntent pendingIntentTemplate = PendingIntent.getBroadcast(
                 context, 0, clickIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 

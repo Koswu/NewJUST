@@ -57,7 +57,7 @@
                         app:cardElevation="5dp">
 
                         <ImageView
-                            android:id="@+id/iv_every_day"
+                            android:id="@+id/iv_one"
                             android:layout_width="match_parent"
                             android:layout_height="100dp"
                             android:scaleType="centerCrop" />
@@ -93,7 +93,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:gravity="center"
-                        android:text="每日一句" />
+                        android:text="One" />
 
                     <TextView
                         android:layout_width="wrap_content"

@@ -39,6 +39,7 @@ dependencies {
     })
     compile files('libs/ocr-sdk.jar')
     compile project(path: ':ocr_ui')
+    compile project(path: ':library')
     compile 'com.android.support:appcompat-v7:26.+'
     compile 'com.android.support:design:26.+'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
@@ -69,5 +70,4 @@ dependencies {
     compile 'com.github.recruit-lifestyle:WaveSwipeRefreshLayout:1.6'
     compile 'com.github.paolorotolo:appintro:3.4.0'
     testCompile 'junit:junit:4.12'
-    compile project(path: ':library')
 }

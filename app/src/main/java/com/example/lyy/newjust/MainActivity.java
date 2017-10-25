@@ -251,20 +251,21 @@ public class MainActivity extends AppCompatActivity
         ImageView iv_health = (ImageView) findViewById(R.id.iv_health);
         ImageView iv_weibo = (ImageView) findViewById(R.id.iv_weibo);
         ImageView iv_schedule = (ImageView) findViewById(R.id.iv_schedule);
-        ImageView iv_every_day = (ImageView) findViewById(R.id.iv_every_day);
+        ImageView iv_one = (ImageView) findViewById(R.id.iv_one);
         ImageView iv_memory = (ImageView) findViewById(R.id.iv_memory);
         ImageView iv_history = (ImageView) findViewById(R.id.iv_history);
 
         Glide.with(this).load(R.drawable.bg_constellation).into(iv_constellation);
         Glide.with(this).load(R.drawable.bg_health).into(iv_health);
         Glide.with(this).load(R.drawable.bg_weibo).into(iv_weibo);
-        Glide.with(this).load(R.drawable.bg_every_day).into(iv_every_day);
+        Glide.with(this).load(R.drawable.bg_every_day).into(iv_one);
         Glide.with(this).load(R.drawable.bg_memory).into(iv_memory);
         Glide.with(this).load(R.drawable.bg_schedule).into(iv_schedule);
         Glide.with(this).load(R.drawable.bg_history).into(iv_history);
 
         iv_constellation.setOnClickListener(this);
         iv_health.setOnClickListener(this);
+        iv_one.setOnClickListener(this);
         iv_weibo.setOnClickListener(this);
         iv_memory.setOnClickListener(this);
         iv_schedule.setOnClickListener(this);
@@ -612,10 +613,12 @@ public class MainActivity extends AppCompatActivity
                 startActivity(historyIntent);
                 break;
             case R.id.iv_weibo:
-                Toast.makeText(MainActivity.this, "今日糗事", Toast.LENGTH_SHORT).show();
+                Intent weiboIntent = new Intent(MainActivity.this, WeiBoActivity.class);
+                startActivity(weiboIntent);
                 break;
-            case R.id.iv_every_day:
-                Toast.makeText(MainActivity.this, "每日一句", Toast.LENGTH_SHORT).show();
+            case R.id.iv_one:
+                Intent oneIntent = new Intent(MainActivity.this, OneActivity.class);
+                startActivity(oneIntent);
                 break;
             case R.id.nav_todo:
                 Intent todoIntent = new Intent(MainActivity.this, ToDoActivity.class);
