@@ -4,10 +4,11 @@
     android:layout_width="match_parent"
     android:layout_height="90dp"
     android:background="@color/material_white_1000"
-    android:paddingBottom="10dp"
-    android:orientation="horizontal">
+    android:orientation="horizontal"
+    android:paddingBottom="10dp">
 
     <LinearLayout
+        android:id="@+id/nav_eat"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
@@ -27,7 +28,7 @@
             android:layout_height="0dp"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="吃啥" />
+            android:text="吃货" />
 
     </LinearLayout>
 

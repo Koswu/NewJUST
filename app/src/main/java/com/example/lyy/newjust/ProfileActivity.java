@@ -9,6 +9,7 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -30,6 +31,7 @@ import android.widget.Toast;
 
 import com.flyco.dialog.listener.OnOperItemClickL;
 import com.flyco.dialog.widget.ActionSheetDialog;
+import com.githang.statusbar.StatusBarCompat;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -68,6 +70,8 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
+
+        StatusBarCompat.setStatusBarColor(this, Color.rgb(0, 127, 193));
 
         init();
     }
@@ -219,6 +223,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                     if (Build.VERSION.SDK_INT >= 19) {
                         // 4.4及以上系统使用这个方法处理图片
                         Uri uri = data.getData();
+                        Log.d(TAG, "onActivityResult: " + uri);
                         Intent cropIntent = new Intent(ProfileActivity.this, CropViewActivity.class);
                         cropIntent.putExtra("uri", uri.toString());
                         startActivity(cropIntent);

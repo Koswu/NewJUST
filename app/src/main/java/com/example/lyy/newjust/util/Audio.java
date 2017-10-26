@@ -58,7 +58,7 @@ public class Audio {
                     //bundle是一个key-value对，读数据的时候我写出key就可以读到对应的value
                     Bundle b = new Bundle();
                     //key设为"sound"，value设为分贝值，保留两位小数
-                    b.putString("sound", String.format("%.2f", volume));
+                    b.putDouble("sound", volume);
                     msg.setData(b);
                     myHandler.sendMessage(msg);
                     //停100ms

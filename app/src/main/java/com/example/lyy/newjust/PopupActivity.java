@@ -1,12 +1,13 @@
 package com.example.lyy.newjust;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Handler;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.view.KeyEvent;
+import android.util.Log;
 import android.view.MenuItem;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -17,22 +18,29 @@ import jp.co.recruit_lifestyle.android.widget.WaveSwipeRefreshLayout;
 import me.imid.swipebacklayout.lib.SwipeBackLayout;
 import me.imid.swipebacklayout.lib.app.SwipeBackActivity;
 
-public class OneActivity extends SwipeBackActivity {
+public class PopupActivity extends SwipeBackActivity {
 
-    private WebView webView;
+    private static final String TAG = "PopupActivity";
 
     private WaveSwipeRefreshLayout mWaveSwipeRefreshLayout;
 
-    private String url;
+    private WebView webView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_one);
+        setContentView(R.layout.activity_popup);
 
-        StatusBarCompat.setStatusBarColor(this, Color.rgb(0, 127, 193));
+        StatusBarCompat.setStatusBarColor(this, Color.rgb(0,127,193));
 
-        url = "http://120.25.88.41/oneDay/one/index.html";
+        Intent intent = getIntent();
+        String url = intent.getStringExtra("URL");
+
+        webView = (WebView) findViewById(R.id.detail_web_view);
+        webView.getSettings().setJavaScriptEnabled(true);
+        webView.setWebViewClient(new WebViewClient());
+        Log.d(TAG, "onCreate: " + url);
+        webView.loadUrl(url);
 
         setSwipeBackEnable(true);   // 可以调用该方法，设置是否允许滑动退出
         SwipeBackLayout mSwipeBackLayout = getSwipeBackLayout();
@@ -42,7 +50,7 @@ public class OneActivity extends SwipeBackActivity {
         mSwipeBackLayout.setEdgeSize(200);
 
         //设置和toolbar相关的
-        Toolbar toolbar = (Toolbar) findViewById(R.id.one_toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.detail_toolbar);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
@@ -50,12 +58,7 @@ public class OneActivity extends SwipeBackActivity {
             actionBar.setDisplayShowTitleEnabled(false);
         }
 
-        webView = (WebView) findViewById(R.id.one_web_view);
-        webView.getSettings().setJavaScriptEnabled(true);
-        webView.setWebViewClient(new WebViewClient());
-        webView.loadUrl(url);
-
-        mWaveSwipeRefreshLayout = (WaveSwipeRefreshLayout) findViewById(R.id.one_swipe);
+        mWaveSwipeRefreshLayout = (WaveSwipeRefreshLayout) findViewById(R.id.detail_swipe);
         //设置转的圈的颜色
         mWaveSwipeRefreshLayout.setColorSchemeColors(Color.WHITE, Color.WHITE);
         //设置水波纹的颜色
@@ -74,15 +77,6 @@ public class OneActivity extends SwipeBackActivity {
 
             }
         });
-    }
-
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_BACK && webView.canGoBack()) {
-            webView.goBack();// 返回前一个页面
-            return true;
-        }
-        return super.onKeyDown(keyCode, event);
     }
 
     @Override

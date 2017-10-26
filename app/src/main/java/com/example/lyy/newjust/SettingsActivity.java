@@ -1,6 +1,7 @@
 package com.example.lyy.newjust;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -9,6 +10,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import com.githang.statusbar.StatusBarCompat;
+
 public class SettingsActivity extends AppCompatActivity implements View.OnClickListener {
 
     @Override
@@ -16,6 +19,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
 
+        StatusBarCompat.setStatusBarColor(this, Color.rgb(0,127,193));
         init();
 
     }

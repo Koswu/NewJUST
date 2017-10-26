@@ -9,6 +9,7 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.SET_WALLPAPER" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.VIBRATE" />
 
     <application
         android:name="org.litepal.LitePalApplication"
@@ -43,6 +44,8 @@
         <activity android:name=".AudioActivity" />
         <activity android:name=".HistoryActivity" />
         <activity android:name=".WelcomeActivity" />
+        <activity android:name=".WeiBoActivity" />
+        <activity android:name=".OneActivity" />
 
         <provider
             android:name="android.support.v4.content.FileProvider"
@@ -65,14 +68,20 @@
                 android:name="android.appwidget.provider"
                 android:resource="@xml/widget_info" />
         </receiver>
+        <receiver
+            android:name=".AlarmReceiver"
+            android:process=":remote" />
 
         <service
             android:name=".service.ToDoListViewService"
             android:exported="false"
             android:permission="android.permission.BIND_REMOTEVIEWS" />
+        <service
+            android:name=".service.LongRunningService"
+            android:enabled="true"
+            android:exported="true" />
 
-        <activity android:name=".WeiBoActivity" />
-        <activity android:name=".OneActivity"></activity>
+        <activity android:name=".PopupActivity"></activity>
     </application>
 
 </manifest>

@@ -1,7 +1,11 @@
 package com.example.lyy.newjust;
 
+import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Handler;
+import android.os.Message;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -9,8 +13,16 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MenuItem;
+import android.view.WindowManager;
+import android.webkit.WebChromeClient;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+import android.widget.Toast;
+
+import com.githang.statusbar.StatusBarCompat;
 
 import jp.co.recruit_lifestyle.android.widget.WaveSwipeRefreshLayout;
 import me.imid.swipebacklayout.lib.SwipeBackLayout;
@@ -19,18 +31,79 @@ import me.imid.swipebacklayout.lib.app.SwipeBackActivity;
 public class HistoryActivity extends SwipeBackActivity {
     private static final String TAG = "HistoryActivity";
 
+    private WaveSwipeRefreshLayout history_activity;
+
     private WebView webView;
 
     private WaveSwipeRefreshLayout mWaveSwipeRefreshLayout;
 
     private String url;
 
+    private WebChromeClient wbc = new WebChromeClient() {
+
+        @Override
+        public boolean onCreateWindow(WebView view, boolean isDialog,
+                                      boolean isUserGesture, Message resultMsg) {
+
+            //TODO something
+            WebView newWebView = new WebView(view.getContext());
+            newWebView.setWebViewClient(new WebViewClient() {
+                @Override
+                public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                    Log.d(TAG, "shouldOverrideUrlLoading: " + url);
+                    Intent browserIntent = new Intent(HistoryActivity.this, PopupActivity.class);
+                    browserIntent.putExtra("URL", url);
+                    startActivity(browserIntent);
+                    return true;
+                }
+            });
+
+            WebSettings webSettings = newWebView.getSettings();
+            webSettings.setLoadWithOverviewMode(true);
+            webSettings.setJavaScriptEnabled(true);
+            webSettings.setJavaScriptCanOpenWindowsAutomatically(true);
+
+            history_activity.addView(newWebView);
+            WebView.WebViewTransport transport = (WebView.WebViewTransport) resultMsg.obj;
+            transport.setWebView(newWebView);
+            resultMsg.sendToTarget();
+            return true;
+        }
+    };
+
+    private void initWebview() {
+        url = "http://120.25.88.41/oneDay/history/index.html";
+
+        webView = (WebView) findViewById(R.id.history_web_view);
+
+        WebSettings webSettings = webView.getSettings();
+        //如果访问的页面中要与Javascript交互，则webview必须设置支持Javascript
+        webSettings.setJavaScriptEnabled(true);
+        webSettings.setSupportMultipleWindows(true);
+        //设置自适应屏幕，两者合用
+        webSettings.setUseWideViewPort(true); //将图片调整到适合webview的大小
+        webSettings.setLoadWithOverviewMode(true); // 缩放至屏幕的大小
+
+        webSettings.setSupportMultipleWindows(true);
+        //支持通过JS打开新窗口
+        webSettings.setJavaScriptCanOpenWindowsAutomatically(true);
+        webView.setWebViewClient(new WebViewClient() {
+            //复写shouldOverrideUrlLoading()方法，使得打开网页时不调用系统浏览器， 而是在本WebView中显示
+            @Override
+            public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                view.loadUrl(url);
+                return true;
+            }
+        });
+        webView.setWebChromeClient(wbc);
+        webView.loadUrl(url);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        StatusBarCompat.setStatusBarColor(this, Color.rgb(0, 127, 193));
         setContentView(R.layout.activity_history);
-
-        url = "http://120.25.88.41/oneDay/history/index.html";
 
         setSwipeBackEnable(true);   // 可以调用该方法，设置是否允许滑动退出
         SwipeBackLayout mSwipeBackLayout = getSwipeBackLayout();
@@ -48,10 +121,7 @@ public class HistoryActivity extends SwipeBackActivity {
             actionBar.setDisplayShowTitleEnabled(false);
         }
 
-        webView = (WebView) findViewById(R.id.history_web_view);
-        webView.getSettings().setJavaScriptEnabled(true);
-        webView.setWebViewClient(new WebViewClient());
-        webView.loadUrl(url);
+        history_activity = (WaveSwipeRefreshLayout) findViewById(R.id.history_swipe);
 
         mWaveSwipeRefreshLayout = (WaveSwipeRefreshLayout) findViewById(R.id.history_swipe);
         //设置转的圈的颜色
@@ -65,13 +135,15 @@ public class HistoryActivity extends SwipeBackActivity {
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        webView.loadUrl(url);
+                        webView.loadUrl(webView.getUrl());
                         mWaveSwipeRefreshLayout.setRefreshing(false);
                     }
                 }, 3000);
 
             }
         });
+
+        initWebview();
     }
 
     @Override

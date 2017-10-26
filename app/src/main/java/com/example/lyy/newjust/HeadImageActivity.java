@@ -56,7 +56,7 @@ public class HeadImageActivity extends DraggerActivity {
         bg_imageview.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                draggerView.closeActivity();
+                HeadImageActivity.this.finish();
             }
         });
         bg_imageview.setOnLongClickListener(new View.OnLongClickListener() {

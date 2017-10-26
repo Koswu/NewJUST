@@ -1,7 +1,11 @@
 package com.example.lyy.newjust;
 
 import android.app.Activity;
+import android.app.AlarmManager;
 import android.app.AlertDialog;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -22,6 +26,7 @@ import android.support.v4.widget.ViewDragHelper;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.app.NotificationCompat;
 import android.support.v7.widget.Toolbar;
 import android.util.Base64;
 import android.util.Log;
@@ -37,10 +42,12 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.lyy.newjust.gson.Weather;
+import com.example.lyy.newjust.service.LongRunningService;
 import com.example.lyy.newjust.util.AppConstants;
 import com.example.lyy.newjust.util.HttpUtil;
 import com.example.lyy.newjust.util.SpUtils;
 import com.example.lyy.newjust.util.Util;
+import com.githang.statusbar.StatusBarCompat;
 import com.mxn.soul.flowingdrawer_core.ElasticDrawer;
 import com.mxn.soul.flowingdrawer_core.FlowingDrawer;
 import com.nightonke.boommenu.BoomButtons.OnBMClickListener;
@@ -57,7 +64,9 @@ import org.json.JSONObject;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.util.Calendar;
 import java.util.List;
+import java.util.TimeZone;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -71,9 +80,14 @@ public class MainActivity extends AppCompatActivity
 
     private static final String TAG = "MainActivity";
 
-    private String headPicUrl;
+    private static int index = 0;
 
+    //记录用户首次点击返回键的时间
+    private long firstTime = 0;
+
+    private String headPicUrl;
     private String imageBase64;
+    private String constellation_en;
 
     private CollapsingToolbarLayout collapsingToolbarLayout;
 
@@ -81,19 +95,12 @@ public class MainActivity extends AppCompatActivity
 
     private CircleImageView civ_header;
 
-    private SharedPreferences sharedPreferences;
-    private SharedPreferences.Editor editor;
-
     private FlowingDrawer mDrawer;
-
-    private String constellation_en;
 
     private AlertDialog dialog;
 
-    private static int index = 0;
-
-    //记录用户首次点击返回键的时间
-    private long firstTime = 0;
+    private SharedPreferences sharedPreferences;
+    private SharedPreferences.Editor editor;
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -112,6 +119,12 @@ public class MainActivity extends AppCompatActivity
         }
 
         setContentView(R.layout.activity_main);
+        StatusBarCompat.setStatusBarColor(this, Color.rgb(0, 127, 193));
+
+        Intent service = new Intent(this, LongRunningService.class);
+        startService(service);
+
+        StatusBarCompat.setStatusBarColor(this, Color.rgb(0, 127, 193));
 
         //设置状态栏和toolbar颜色一致
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
@@ -177,6 +190,7 @@ public class MainActivity extends AppCompatActivity
         }
     };
 
+    //初始化相关控件
     private void init() {
 
         //设置和toolbar相关的
@@ -272,14 +286,16 @@ public class MainActivity extends AppCompatActivity
         iv_history.setOnClickListener(this);
 
         LinearLayout nav_todo = (LinearLayout) findViewById(R.id.nav_todo);
+        LinearLayout nav_eat = (LinearLayout) findViewById(R.id.nav_eat);
         nav_todo.setOnClickListener(this);
+        nav_eat.setOnClickListener(this);
 
 
         //设置底部弹窗
         showBoomMenu();
     }
 
-    //设置底部弹窗按钮
+    //设置底部弹窗按钮--------------------------开始----------------------------
     private void showBoomMenu() {
         BoomMenuButton boomMenuButton = (BoomMenuButton) findViewById(R.id.bmb);
         for (int i = 0; i < boomMenuButton.getPiecePlaceEnum().pieceNumber(); i++) {
@@ -341,44 +357,7 @@ public class MainActivity extends AppCompatActivity
             R.drawable.ic_menu_translate,
             R.drawable.ic_menu_library,
     };
-
-    //改变图片的亮度方法 0--原样  >0---调亮  <0---调暗
-    private void changeLight(ImageView imageView, int brightness) {
-        ColorMatrix cMatrix = new ColorMatrix();
-        cMatrix.set(new float[]{1, 0, 0, 0, brightness, 0, 1, 0, 0,
-                brightness,// 改变亮度
-                0, 0, 1, 0, brightness, 0, 0, 0, 1, 0});
-        imageView.setColorFilter(new ColorMatrixColorFilter(cMatrix));
-    }
-
-    //解决DrawerLayout不能全屏滑动的问题
-    private void setDrawerLeftEdgeSize(Activity activity, DrawerLayout drawerLayout, float displayWidthPercentage) {
-        if (activity == null || drawerLayout == null) return;
-        try {
-            // 找到 ViewDragHelper 并设置 Accessible 为true
-            Field leftDraggerField =
-                    drawerLayout.getClass().getDeclaredField("mLeftDragger");//Right
-            leftDraggerField.setAccessible(true);
-            ViewDragHelper leftDragger = (ViewDragHelper) leftDraggerField.get(drawerLayout);
-
-            // 找到 edgeSizeField 并设置 Accessible 为true
-            Field edgeSizeField = leftDragger.getClass().getDeclaredField("mEdgeSize");
-            edgeSizeField.setAccessible(true);
-            int edgeSize = edgeSizeField.getInt(leftDragger);
-
-            // 设置新的边缘大小
-            Point displaySize = new Point();
-            activity.getWindowManager().getDefaultDisplay().getSize(displaySize);
-            edgeSizeField.setInt(leftDragger, Math.max(edgeSize, (int) (displaySize.x *
-                    displayWidthPercentage)));
-        } catch (NoSuchFieldException e) {
-
-        } catch (IllegalArgumentException e) {
-
-        } catch (IllegalAccessException e) {
-
-        }
-    }
+    //设置底部弹窗按钮--------------------------结束----------------------------
 
     //发送查询天气的请求
     private void requestWeather() {
@@ -405,6 +384,7 @@ public class MainActivity extends AppCompatActivity
         });
     }
 
+    //解析天气请求的数据
     private void parseWeatherData(Weather weather) {
         final String degree = weather.now.temperature + "℃";
         final String weatherInfo = weather.now.more.info;
@@ -623,6 +603,8 @@ public class MainActivity extends AppCompatActivity
             case R.id.nav_todo:
                 Intent todoIntent = new Intent(MainActivity.this, ToDoActivity.class);
                 startActivity(todoIntent);
+                break;
+            case R.id.nav_eat:
                 break;
         }
     }

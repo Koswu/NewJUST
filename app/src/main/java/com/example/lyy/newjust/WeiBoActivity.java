@@ -11,6 +11,8 @@ import android.view.MenuItem;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
+import com.githang.statusbar.StatusBarCompat;
+
 import jp.co.recruit_lifestyle.android.widget.WaveSwipeRefreshLayout;
 import me.imid.swipebacklayout.lib.SwipeBackLayout;
 import me.imid.swipebacklayout.lib.app.SwipeBackActivity;
@@ -29,6 +31,8 @@ public class WeiBoActivity extends SwipeBackActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_wei_bo);
+
+        StatusBarCompat.setStatusBarColor(this, Color.rgb(0, 127, 193));
 
         url = "http://120.25.88.41/oneDay/fml/index.html";
 
@@ -65,7 +69,7 @@ public class WeiBoActivity extends SwipeBackActivity {
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        webView.loadUrl(url);
+                        webView.loadUrl(webView.getUrl());
                         mWaveSwipeRefreshLayout.setRefreshing(false);
                     }
                 }, 3000);
