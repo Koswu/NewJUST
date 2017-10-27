@@ -9,6 +9,13 @@
     <string name="action_about">关于我们</string>
     <string name="action_exit">退出应用</string>
 
+    <string name="action_add">添加纪念日</string>
+    <string name="action_sure">完成添加</string>
+    <string name="action_share">分享</string>
+
+    <string name="Save">Save</string>
+    <string name="Complete">Complete</string>
+
     <string name="menu_group_1">校园</string>
     <string name="menu_group_2">更多</string>
 
@@ -20,6 +27,8 @@
     <string name="item_pe">体育课查询</string>
     <string name="item_myday">我的一天</string>
     <string name="title_activity_settings">Settings</string>
+
+    <string name="bottom">——————我也是有底线的——————</string>
 
     <!-- Strings related to Settings -->
 

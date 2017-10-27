@@ -6,12 +6,10 @@ import android.app.Service;
 import android.content.Intent;
 import android.os.Build;
 import android.os.IBinder;
-import android.support.annotation.IntDef;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.example.lyy.newjust.AlarmReceiver;
-import com.example.lyy.newjust.MainActivity;
+import com.example.lyy.newjust.util.AlarmReceiver;
 
 import java.util.Calendar;
 import java.util.TimeZone;

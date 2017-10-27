@@ -21,7 +21,7 @@
         android:theme="@style/AppTheme"
         tools:replace="android:icon">
         <activity
-            android:name=".MainActivity"
+            android:name=".activity.MainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -31,21 +31,21 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".SubjectActivity"
+            android:name=".activity.Subject.SubjectActivity"
             android:launchMode="singleTop" />
-        <activity android:name=".HeadImageActivity" />
-        <activity android:name=".ToDoActivity" />
-        <activity android:name=".SettingsActivity" />
-        <activity android:name=".ProfileActivity" />
-        <activity android:name=".EMSActivity" />
-        <activity android:name=".OCRActivity" />
-        <activity android:name=".EipActivity" />
-        <activity android:name=".TranslateActivity" />
-        <activity android:name=".AudioActivity" />
-        <activity android:name=".HistoryActivity" />
-        <activity android:name=".WelcomeActivity" />
-        <activity android:name=".WeiBoActivity" />
-        <activity android:name=".OneActivity" />
+        <activity android:name=".activity.HeadImageActivity" />
+        <activity android:name=".activity.ToDoActivity" />
+        <activity android:name=".activity.Setting.SettingsActivity" />
+        <activity android:name=".activity.Setting.ProfileActivity" />
+        <activity android:name=".activity.Tools.EMSActivity" />
+        <activity android:name=".activity.Tools.OCRActivity" />
+        <activity android:name=".activity.Tools.EipActivity" />
+        <activity android:name=".activity.One.TranslateActivity" />
+        <activity android:name=".activity.Tools.AudioActivity" />
+        <activity android:name=".activity.One.HistoryActivity" />
+        <activity android:name=".activity.WelcomeActivity" />
+        <activity android:name=".activity.One.WeiBoActivity" />
+        <activity android:name=".activity.One.OneActivity" />
 
         <provider
             android:name="android.support.v4.content.FileProvider"
@@ -57,9 +57,9 @@
                 android:resource="@xml/file_paths" />
         </provider>
 
-        <activity android:name=".CropViewActivity" />
+        <activity android:name=".activity.Setting.CropViewActivity" />
 
-        <receiver android:name=".ToDoWidgetProvider">
+        <receiver android:name=".util.ToDoWidgetProvider">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
@@ -69,7 +69,7 @@
                 android:resource="@xml/widget_info" />
         </receiver>
         <receiver
-            android:name=".AlarmReceiver"
+            android:name=".util.AlarmReceiver"
             android:process=":remote" />
 
         <service
@@ -81,7 +81,11 @@
             android:enabled="true"
             android:exported="true" />
 
-        <activity android:name=".PopupActivity"></activity>
+        <activity android:name=".activity.One.PopupActivity" />
+        <activity android:name=".activity.Memory.MemoryDayActivity" />
+        <activity android:name=".activity.One.ConstellationActivity" />
+        <activity android:name=".activity.Memory.ModifyMemoryActivity" />
+        <activity android:name=".activity.Memory.MemoryDetailActivity"></activity>
     </application>
 
 </manifest>

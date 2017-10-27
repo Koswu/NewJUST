@@ -9,9 +9,6 @@ import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
 import com.example.lyy.newjust.R;
-import com.example.lyy.newjust.db.ToDo;
-
-import org.litepal.crud.DataSupport;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -82,7 +79,7 @@ public class ToDoListViewFactory implements RemoteViewsService.RemoteViewsFactor
         String content = mList.get(position);
         // 创建在当前索引位置要显示的View
         final RemoteViews rv = new RemoteViews(mContext.getPackageName(),
-                R.layout.todo_widget_layout_item);
+                R.layout.item_todo_widget);
 
         // 设置要显示的内容
         rv.setTextViewText(R.id.widget_list_item_tv, content);

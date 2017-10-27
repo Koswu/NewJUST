@@ -61,7 +61,7 @@ public class Audio {
                     b.putDouble("sound", volume);
                     msg.setData(b);
                     myHandler.sendMessage(msg);
-                    //停100ms
+                    //停500ms
                     synchronized (mLock) {
                         try {
                             mLock.wait(500);

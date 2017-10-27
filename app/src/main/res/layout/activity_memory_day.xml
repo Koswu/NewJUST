@@ -1,16 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
     <android.support.design.widget.AppBarLayout
-        android:id="@+id/detail_appbar"
+        android:id="@+id/memory_appbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <android.support.v7.widget.Toolbar
-            android:id="@+id/detail_toolbar"
+            android:id="@+id/memory_toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="@color/colorPrimary">
@@ -19,25 +20,28 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:text="详情"
+                android:text="纪念日"
                 android:textColor="@color/material_white_1000"
                 android:textSize="20sp" />
         </android.support.v7.widget.Toolbar>
     </android.support.design.widget.AppBarLayout>
 
-    <jp.co.recruit_lifestyle.android.widget.WaveSwipeRefreshLayout
-        android:id="@+id/detail_swipe"
+    <lib.homhomlib.design.SlidingLayout
+        android:id="@+id/slideLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        app:background_view="@layout/header_hidden_xml"
+        app:sliding_mode="both">
 
-        <WebView
-            android:id="@+id/detail_web_view"
+        <com.baoyz.swipemenulistview.SwipeMenuListView
+            android:id="@+id/swipeMenuListView"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:background="#ffffff"
+            android:paddingTop="20dp" />
 
-        </WebView>
+    </lib.homhomlib.design.SlidingLayout>
 
-    </jp.co.recruit_lifestyle.android.widget.WaveSwipeRefreshLayout>
 
 </LinearLayout>
 
