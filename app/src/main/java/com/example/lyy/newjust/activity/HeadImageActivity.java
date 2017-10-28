@@ -2,7 +2,6 @@ package com.example.lyy.newjust.activity;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
@@ -36,16 +35,12 @@ public class HeadImageActivity extends DraggerActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //去掉Activity上面的状态栏
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_head_image);
 
-        //设置状态栏和toolbar颜色一致
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            WindowManager.LayoutParams localLayoutParams = getWindow().getAttributes();
-            localLayoutParams.flags = (WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS | localLayoutParams.flags);
-        }
-
-
         draggerView = (DraggerView) findViewById(R.id.dragger_view);
+        draggerView.setDraggerLimit(0.9f);
         draggerView.setDraggerPosition(DraggerPosition.BOTTOM);
 
         Intent intent = getIntent();
@@ -55,7 +50,7 @@ public class HeadImageActivity extends DraggerActivity {
         bg_imageview.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                HeadImageActivity.this.finish();
+                draggerView.closeActivity();
             }
         });
         bg_imageview.setOnLongClickListener(new View.OnLongClickListener() {

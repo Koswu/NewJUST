@@ -46,7 +46,7 @@ public class ModifyMemoryActivity extends AppCompatActivity implements View.OnCl
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_memory);
 
-        StatusBarCompat.setStatusBarColor(this, Color.rgb(0, 127, 193));
+        StatusBarCompat.setStatusBarColor(this, Color.rgb(0, 172, 193));
 
         //设置和toolbar相关的
         Toolbar toolbar = (Toolbar) findViewById(R.id.add_memory_toolbar);

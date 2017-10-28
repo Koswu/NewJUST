@@ -32,7 +32,7 @@ public class PopupActivity extends SwipeBackActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_popup);
 
-        StatusBarCompat.setStatusBarColor(this, Color.rgb(0,127,193));
+        StatusBarCompat.setStatusBarColor(this, Color.rgb(0,172,193));
 
         Intent intent = getIntent();
         String url = intent.getStringExtra("URL");
@@ -63,7 +63,7 @@ public class PopupActivity extends SwipeBackActivity {
         //设置转的圈的颜色
         mWaveSwipeRefreshLayout.setColorSchemeColors(Color.WHITE, Color.WHITE);
         //设置水波纹的颜色
-        mWaveSwipeRefreshLayout.setWaveColor(Color.rgb(0, 172, 193));
+        mWaveSwipeRefreshLayout.setWaveColor(Color.rgb(135,206,235));
         mWaveSwipeRefreshLayout.setOnRefreshListener(new WaveSwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {

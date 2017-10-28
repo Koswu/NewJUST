@@ -96,7 +96,7 @@ public class HistoryActivity extends SwipeBackActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        StatusBarCompat.setStatusBarColor(this, Color.rgb(0, 127, 193));
+        StatusBarCompat.setStatusBarColor(this, Color.rgb(0, 172, 193));
         setContentView(R.layout.activity_history);
 
         setSwipeBackEnable(true);   // 可以调用该方法，设置是否允许滑动退出
@@ -121,7 +121,7 @@ public class HistoryActivity extends SwipeBackActivity {
         //设置转的圈的颜色
         mWaveSwipeRefreshLayout.setColorSchemeColors(Color.WHITE, Color.WHITE);
         //设置水波纹的颜色
-        mWaveSwipeRefreshLayout.setWaveColor(Color.rgb(0, 172, 193));
+        mWaveSwipeRefreshLayout.setWaveColor(Color.rgb(135,206,235));
         mWaveSwipeRefreshLayout.setOnRefreshListener(new WaveSwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {

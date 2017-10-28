@@ -9,10 +9,28 @@ public class Memory {
     private String memory_content;  //提醒的内容
     private String memory_day;      //提醒的日期
 
-    public Memory(String content, String day) {
+    private int imageId;            //背景
+
+    public int getImageId() {
+        return imageId;
+    }
+
+    public void setImageId(int imageId) {
+        this.imageId = imageId;
+    }
+
+    public Memory(String content, String day, int id) {
         this.memory_content = content;
         this.memory_day = day;
+
+        this.imageId = id;
     }
+
+//    public Memory(String content, String day) {
+//        this.memory_content = content;
+//        this.memory_day = day;
+//
+//    }
 
     public String getMemory_content() {
         return memory_content;

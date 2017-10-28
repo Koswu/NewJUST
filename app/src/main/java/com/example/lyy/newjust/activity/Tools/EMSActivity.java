@@ -31,6 +31,10 @@ public class EMSActivity extends SwipeBackActivity {
 
         webView = (WebView) findViewById(R.id.ems_web_view);
         webView.getSettings().setJavaScriptEnabled(true);
+        webView.getSettings().setSupportMultipleWindows(true);
+        webView.getSettings().setDomStorageEnabled(true);
+        webView.getSettings().setSupportMultipleWindows(true);
+        webView.getSettings().setDefaultTextEncodingName("UTF -8");
         webView.setWebViewClient(new WebViewClient());
         webView.loadUrl("http://m.kuaidi100.com/");
     }

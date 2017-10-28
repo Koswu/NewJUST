@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="color_arr">
+        <!--reds-->
+        <item name="material_red_50">#FFEBEE</item>
+        <item name="material_red_100">#FFCDD2</item>
+        <item name="material_red_200">#EF9A9A</item>
+        <item name="material_red_300">#E57373</item>
+        <item name="material_red_400">#EF5350</item>
+        <item name="material_red_500">#F44336</item>
+        <item name="material_red_600">#E53935</item>
+        <item name="material_red_700">#D32F2F</item>
+        <item name="material_red_800">#C62828</item>
+        <item name="material_red_900">#B71C1C</item>
+        <item name="material_red_A100">#FF8A80</item>
+        <item name="material_red_A200">#FF5252</item>
+        <item name="material_red_A400">#FF1744</item>
+        <item name="material_red_A700">#D50000</item>
+
+        <!-- pinks -->
+        <item name="material_pink_50">#FCE4EC</item>
+        <item name="material_pink_100">#F8BBD0</item>
+        <item name="material_pink_200">#F48FB1</item>
+        <item name="material_pink_300">#F06292</item>
+        <item name="material_pink_400">#EC407A</item>
+        <item name="material_pink_500">#E91E63</item>
+        <item name="material_pink_600">#D81B60</item>
+        <item name="material_pink_700">#C2185B</item>
+        <item name="material_pink_800">#AD1457</item>
+        <item name="material_pink_900">#880E4F</item>
+        <item name="material_pink_A100">#FF80AB</item>
+        <item name="material_pink_A200">#FF4081</item>
+        <item name="material_pink_A400">#F50057</item>
+        <item name="material_pink_A700">#C51162</item>
+
+        <!-- purples -->
+        <item name="material_purple_50">#F3E5F5</item>
+        <item name="material_purple_100">#E1BEE7</item>
+        <item name="material_purple_200">#CE93D8</item>
+        <item name="material_purple_300">#BA68C8</item>
+        <item name="material_purple_400">#AB47BC</item>
+        <item name="material_purple_500">#9C27B0</item>
+        <item name="material_purple_600">#8E24AA</item>
+        <item name="material_purple_700">#7B1FA2</item>
+        <item name="material_purple_800">#6A1B9A</item>
+        <item name="material_purple_900">#4A148C</item>
+        <item name="material_purple_A100">#EA80FC</item>
+        <item name="material_purple_A200">#E040FB</item>
+        <item name="material_purple_A400">#D500F9</item>
+        <item name="material_purple_A700">#AA00FF</item>
+
+        <!-- deep purples -->
+        <item name="material_deep_purple_300">#9575CD</item>
+        <item name="material_deep_purple_400">#7E57C2</item>
+        <item name="material_deep_purple_500">#673AB7</item>
+        <item name="material_deep_purple_600">#5E35B1</item>
+        <item name="material_deep_purple_700">#512DA8</item>
+        <item name="material_deep_purple_800">#4527A0</item>
+        <item name="material_deep_purple_900">#311B92</item>
+        <item name="material_deep_purple_A100">#B388FF</item>
+        <item name="material_deep_purple_A200">#7C4DFF</item>
+        <item name="material_deep_purple_A400">#651FFF</item>
+        <item name="material_deep_purple_A700">#6200EA</item>
+
+        <!-- indigo -->
+        <item name="material_indigo_50">#E8EAF6</item>
+        <item name="material_indigo_100">#C5CAE9</item>
+        <item name="material_indigo_200">#9FA8DA</item>
+        <item name="material_indigo_300">#7986CB</item>
+        <item name="material_indigo_400">#5C6BC0</item>
+        <item name="material_indigo_500">#3F51B5</item>
+        <item name="material_indigo_600">#3949AB</item>
+        <item name="material_indigo_700">#303F9F</item>
+        <item name="material_indigo_A100">#8C9EFF</item>
+        <item name="material_indigo_A200">#536DFE</item>
+        <item name="material_indigo_A400">#3D5AFE</item>
+        <item name="material_indigo_A700">#304FFE</item>
+
+        <!--blue-->
+        <item name="material_blue_50">#E3F2FD</item>
+        <item name="material_blue_100">#BBDEFB</item>
+        <item name="material_blue_200">#90CAF9</item>
+        <item name="material_blue_300">#64B5F6</item>
+        <item name="material_blue_400">#42A5F5</item>
+        <item name="material_blue_500">#2196F3</item>
+        <item name="material_blue_600">#1E88E5</item>
+        <item name="material_blue_700">#1976D2</item>
+        <item name="material_blue_800">#1565C0</item>
+        <item name="material_blue_900">#0D47A1</item>
+        <item name="material_blue_A100">#82B1FF</item>
+        <item name="material_blue_A200">#448AFF</item>
+        <item name="material_blue_A400">#2979FF</item>
+        <item name="material_blue_A700">#2962FF</item>
+
+        <!-- light blue-->
+        <item name="material_light_blue_400">#29B6FC</item>
+        <item name="material_light_blue_500">#03A9F4</item>
+        <item name="material_light_blue_600">#039BE5</item>
+        <item name="material_light_blue_700">#0288D1</item>
+        <item name="material_light_blue_800">#0277BD</item>
+        <item name="material_light_blue_900">#01579B</item>
+        <item name="material_light_blue_A100">#80D8FF</item>
+        <item name="material_light_blue_A200">#40C4FF</item>
+        <item name="material_light_blue_A400">#00B0FF</item>
+        <item name="material_light_blue_A700">#0091EA</item>
+
+        <!-- cyan -->
+        <item name="material_cyan_400">#26C6DA</item>
+        <item name="material_cyan_500">#00BCD4</item>
+        <item name="material_cyan_600">#00ACC1</item>
+        <item name="material_cyan_700">#0097A7</item>
+        <item name="material_cyan_A700">#00B8D4</item>
+
+        <!-- teal -->
+        <item name="material_teal_500">#009688</item>
+        <item name="material_teal_600">#00897B</item>
+        <item name="material_teal_700">#00796B</item>
+        <item name="material_teal_A400">#1DE9B6</item>
+        <item name="material_teal_A700">#00BFA5</item>
+
+        <!-- green -->
+        <item name="material_green_300">#81C784</item>
+        <item name="material_green_400">#66BB6A</item>
+        <item name="material_green_500">#4CAF50</item>
+        <item name="material_green_600">#43A047</item>
+        <item name="material_green_700">#388E3C</item>
+        <item name="material_green_A400">#00E676</item>
+        <item name="material_green_A700">#00C853</item>
+
+        <!--light green-->
+        <item name="material_light_green_300">#AED581</item>
+        <item name="material_light_green_400">#9CCC65</item>
+        <item name="material_light_green_500">#8BC34A</item>
+        <item name="material_light_green_600">#7CB342</item>
+        <item name="material_light_green_700">#689F38</item>
+        <item name="material_light_green_A400">#76FF03</item>
+        <item name="material_light_green_A700">#64DD17</item>
+
+        <!-- lime-->
+        <item name="material_lime_300">#DCE775</item>
+        <item name="material_lime_400">#D4E157</item>
+        <item name="material_lime_500">#CDDC39</item>
+        <item name="material_lime_600">#C0CA33</item>
+        <item name="material_lime_700">#A4B42B</item>
+        <item name="material_lime_A400">#C6FF00</item>
+        <item name="material_lime_A700">#AEEA00</item>
+
+        <!--yellow -->
+        <item name="material_yellow_300">#FFF176</item>
+        <item name="material_yellow_400">#FFEE58</item>
+        <item name="material_yellow_500">#FFEB3B</item>
+        <item name="material_yellow_600">#FDD835</item>
+        <item name="material_yellow_700">#FBC02D</item>
+        <item name="material_yellow_A400">#FFEA00</item>
+        <item name="material_yellow_A700">#FFD600</item>
+
+        <!--amber-->
+        <item name="material_amber_300">#FFD54F</item>
+        <item name="material_amber_400">#FFCA28</item>
+        <item name="material_amber_500">#FFC107</item>
+        <item name="material_amber_600">#FFB300</item>
+        <item name="material_amber_700">#FFA000</item>
+        <item name="material_amber_A400">#FFC400</item>
+        <item name="material_amber_A700">#FFAB00</item>
+
+        <!--orange-->
+        <item name="material_orange_400">#FFA726</item>
+        <item name="material_orange_500">#FF9800</item>
+        <item name="material_orange_600">#FB8C00</item>
+        <item name="material_orange_700">#F57C00</item>
+        <item name="material_orange_A400">#FF9100</item>
+        <item name="material_orange_A700">#FF6D00</item>
+
+        <!--deep orange-->
+        <item name="material_deep_orange_50">#FBE9A7</item>
+        <item name="material_deep_orange_100">#FFCCBC</item>
+        <item name="material_deep_orange_200">#FFAB91</item>
+        <item name="material_deep_orange_300">#FF8A65</item>
+        <item name="material_deep_orange_400">#FF7043</item>
+        <item name="material_deep_orange_500">#FF5722</item>
+        <item name="material_deep_orange_600">#F4511E</item>
+        <item name="material_deep_orange_700">#E64A19</item>
+        <item name="material_deep_orange_800">#D84315</item>
+        <item name="material_deep_orange_900">#BF360C</item>
+        <item name="material_deep_orange_A100">#FF9E80</item>
+        <item name="material_deep_orange_A200">#FF6E40</item>
+        <item name="material_deep_orange_A400">#FF3D00</item>
+        <item name="material_deep_orange_A700">#DD2600</item>
+
+        <!--brown -->
+        <item name="material_brown_400">#8D6E63</item>
+        <item name="material_brown_500">#795548</item>
+        <item name="material_brown_600">#6D4C41</item>
+        <item name="material_brown_700">#5D4037</item>
+
+        <!--grey-->
+        <item name="material_grey_400">#BDBDBD</item>
+        <item name="material_grey_500">#9E9E9E</item>
+        <item name="material_grey_600">#757575</item>
+        <item name="material_grey_700">#616161</item>
+
+        <!--blue grey-->
+        <item name="material_blue_grey_300">#90A4AE</item>
+        <item name="material_blue_grey_400">#78909C</item>
+        <item name="material_blue_grey_500">#607D8B</item>
+        <item name="material_blue_grey_600">#546E7A</item>
+        <item name="material_blue_grey_700">#455A64</item>
+        <item name="material_blue_grey_800">#37474F</item>
+    </string-array>
+
+</resources>

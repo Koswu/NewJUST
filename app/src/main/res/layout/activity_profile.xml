@@ -7,26 +7,20 @@
     android:orientation="vertical"
     tools:context="com.example.lyy.newjust.activity.Setting.SettingsActivity">
 
-    <android.support.design.widget.AppBarLayout
-        android:id="@+id/about_appbar"
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/setting_toolbar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/material_white_1000">
 
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/setting_toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="@color/colorPrimary">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:text="个人资料"
-                android:textColor="#000000"
-                android:textSize="18sp" />
-        </android.support.v7.widget.Toolbar>
-    </android.support.design.widget.AppBarLayout>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="个人资料"
+            android:textColor="#000000"
+            android:textSize="18sp" />
+    </android.support.v7.widget.Toolbar>
 
     <ScrollView
         android:layout_width="match_parent"

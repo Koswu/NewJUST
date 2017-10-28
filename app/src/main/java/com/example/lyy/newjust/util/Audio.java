@@ -6,18 +6,21 @@ import android.media.MediaRecorder;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-
-/**
- * Created by lyy on 2017/10/23.
- */
+import android.util.Log;
 
 public class Audio {
+    private static final String TAG = "Audio";
+
     static final int SAMPLE_RATE_IN_HZ = 8000;
     static final int BUFFER_SIZE = AudioRecord.getMinBufferSize(SAMPLE_RATE_IN_HZ,
             AudioFormat.CHANNEL_IN_DEFAULT, AudioFormat.ENCODING_PCM_16BIT);
     AudioRecord mAudioRecord;//用于获取数据
     Object mLock;//为了使用wait函数
     Handler myHandler;//用于向主线程传递数据
+
+    boolean isGetVoiceRun;
+
+    private Thread thread;
 
     public Audio(Handler handler) {
         /*
@@ -29,31 +32,39 @@ public class Audio {
     }
 
     public void getNoiseLevel() {
+
+        if (isGetVoiceRun) {
+            Log.e(TAG, "还在录着呢");
+            return;
+        }
         mAudioRecord = new AudioRecord(MediaRecorder.AudioSource.MIC,
                 SAMPLE_RATE_IN_HZ, AudioFormat.CHANNEL_IN_DEFAULT,
                 AudioFormat.ENCODING_PCM_16BIT, BUFFER_SIZE);
+
+        if (mAudioRecord == null) {
+            Log.e("sound", "mAudioRecord初始化失败");
+        }
+        isGetVoiceRun = true;
+
         //新建一个线程，录音并处理数据
-        new Thread(new Runnable() {
+        thread = new Thread(new Runnable() {
             @Override
             public void run() {
                 mAudioRecord.startRecording();
                 short[] buffer = new short[BUFFER_SIZE];
-                //像这样不给退出条件好像不太好...不管了。
-                while (true) {
-                    //读取数据，返回值是数据长度
+                while (isGetVoiceRun) {
+                    //r是实际读取的数据长度，一般而言r会小于buffersize
                     int r = mAudioRecord.read(buffer, 0, BUFFER_SIZE);
                     long v = 0;
-                    //下面是数据处理，涉及声学的一些知识
-                    //这里是算出一小段时间的平均值
-                    //读到的数据应该是振幅值之类的，求得平方平均数然后取对数再乘一个系数可以得到分贝值。
+                    // 将 buffer 内容取出，进行平方和运算
                     for (int i = 0; i < buffer.length; i++) {
                         v += buffer[i] * buffer[i];
                     }
+                    // 平方和除以数据总长度，得到音量大小。
                     double mean = v / (double) r;
                     double volume = 10 * Math.log10(mean);
-                    /*
-                     * 将数据传递给主线程
-                     */
+                    Log.d(TAG, "分贝值:" + volume);
+
                     Message msg = new Message();
                     //bundle是一个key-value对，读数据的时候我写出key就可以读到对应的value
                     Bundle b = new Bundle();
@@ -61,7 +72,7 @@ public class Audio {
                     b.putDouble("sound", volume);
                     msg.setData(b);
                     myHandler.sendMessage(msg);
-                    //停500ms
+                    // 大概一秒十次
                     synchronized (mLock) {
                         try {
                             mLock.wait(500);
@@ -70,7 +81,24 @@ public class Audio {
                         }
                     }
                 }
+//                mAudioRecord.stop();
+//                mAudioRecord.release();
+//                mAudioRecord = null;
             }
-        }).start();
+        });
+        thread.start();
+    }
+
+    public void cancel() {
+        if (mAudioRecord != null) {
+            try {
+                isGetVoiceRun = false;
+                mAudioRecord.stop();
+                mAudioRecord.release();
+                mAudioRecord = null;
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 }

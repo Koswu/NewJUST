@@ -8,13 +8,13 @@
     android:fitsSystemWindows="true"
     tools:context="com.example.lyy.newjust.activity.HeadImageActivity">
 
-
     <ImageView
         android:id="@+id/bg_imageView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center"
         android:clickable="true"
-        android:fitsSystemWindows="true" />
+        android:fitsSystemWindows="true"
+        android:scaleType="centerCrop" />
 
 </FrameLayout>

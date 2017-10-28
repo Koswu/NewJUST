@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.lyy.newjust.R;
@@ -36,9 +37,11 @@ public class MemoryAdapter extends ArrayAdapter<Memory> {
 
         TextView memory_day = view.findViewById(R.id.memory_day);
         TextView memory_content = view.findViewById(R.id.memory_content);
+        ImageView iv_bg_item_memory = view.findViewById(R.id.iv_bg_item_memory);
 
         memory_day.setText(memory.getMemory_day());
         memory_content.setText(memory.getMemory_content());
+        iv_bg_item_memory.setBackgroundColor(memory.getImageId());
 
         return view;
     }

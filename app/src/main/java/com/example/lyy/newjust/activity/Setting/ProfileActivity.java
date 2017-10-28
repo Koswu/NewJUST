@@ -18,6 +18,7 @@ import android.util.Base64;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.DatePicker;
 import android.widget.LinearLayout;
@@ -67,6 +68,9 @@ public class ProfileActivity extends SwipeBackActivity implements View.OnClickLi
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        //去掉Activity上面的状态栏
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_profile);
 
         StatusBarCompat.setStatusBarColor(this, Color.rgb(0, 127, 193));
@@ -87,6 +91,7 @@ public class ProfileActivity extends SwipeBackActivity implements View.OnClickLi
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setDisplayShowTitleEnabled(false);
+            actionBar.setHomeAsUpIndicator(R.drawable.ic_menu_back_blue);
         }
 
         sharedPreferences = getSharedPreferences("data", MODE_PRIVATE);

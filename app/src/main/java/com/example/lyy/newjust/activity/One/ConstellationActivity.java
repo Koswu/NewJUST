@@ -34,7 +34,7 @@ public class ConstellationActivity extends SwipeBackActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_constellation);
 
-        StatusBarCompat.setStatusBarColor(this, Color.rgb(0, 127, 193));
+        StatusBarCompat.setStatusBarColor(this, Color.rgb(0, 172, 193));
 
         Intent intent = getIntent();
         String constellation_en = intent.getStringExtra("constellation_en");
@@ -67,7 +67,7 @@ public class ConstellationActivity extends SwipeBackActivity {
         //设置转的圈的颜色
         mWaveSwipeRefreshLayout.setColorSchemeColors(Color.WHITE, Color.WHITE);
         //设置水波纹的颜色
-        mWaveSwipeRefreshLayout.setWaveColor(Color.rgb(0, 172, 193));
+        mWaveSwipeRefreshLayout.setWaveColor(Color.rgb(135,206,235));
         mWaveSwipeRefreshLayout.setOnRefreshListener(new WaveSwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {

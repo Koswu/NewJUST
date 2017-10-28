@@ -12,6 +12,7 @@ import android.graphics.Rect;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.NavigationView;
 import android.support.v7.app.ActionBar;
@@ -59,6 +60,7 @@ import com.mxn.soul.flowingdrawer_core.FlowingDrawer;
 import com.nightonke.boommenu.BoomButtons.OnBMClickListener;
 import com.nightonke.boommenu.BoomButtons.TextOutsideCircleButton;
 import com.nightonke.boommenu.BoomMenuButton;
+import com.yalantis.taurus.PullToRefreshView;
 import com.yanzhenjie.permission.AndPermission;
 import com.yanzhenjie.permission.Permission;
 import com.yanzhenjie.permission.PermissionListener;
@@ -98,6 +100,10 @@ public class MainActivity extends AppCompatActivity
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor editor;
 
+    private PullToRefreshView mPullToRefreshView;
+
+    private NotificationManager notificationManager;
+
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -113,9 +119,9 @@ public class MainActivity extends AppCompatActivity
             finish();
             return;
         }
-
+        StatusBarCompat.setStatusBarColor(this, Color.rgb(0, 172, 193));
         setContentView(R.layout.activity_main);
-        StatusBarCompat.setStatusBarColor(this, Color.rgb(0, 127, 193));
+
 
         Intent service = new Intent(this, LongRunningService.class);
         startService(service);
@@ -191,6 +197,8 @@ public class MainActivity extends AppCompatActivity
     //初始化相关控件
     private void init() {
 
+        notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+
         //设置和toolbar相关的
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -210,7 +218,7 @@ public class MainActivity extends AppCompatActivity
         headPicUrl = sharedPreferences.getString("head_pic", null);
         Log.d(TAG, "init: " + headPicUrl);
         if (headPicUrl != null) {
-            Glide.with(this).load(headPicUrl).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(head_image_view);
+            Glide.with(this).load(headPicUrl).crossFade().into(head_image_view);
         } else {
             loadHeadPic();
         }
@@ -288,9 +296,46 @@ public class MainActivity extends AppCompatActivity
         nav_todo.setOnClickListener(this);
         nav_eat.setOnClickListener(this);
 
-
         //设置底部弹窗
         showBoomMenu();
+
+        AppBarLayout appBarLayout = (AppBarLayout) findViewById(R.id.appBar);
+
+        mPullToRefreshView = (PullToRefreshView) findViewById(R.id.pull_to_refresh);
+
+        appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
+            @Override
+            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+                if (verticalOffset >= 0) {
+                    mPullToRefreshView.setEnabled(true);
+                } else {
+                    mPullToRefreshView.setEnabled(false);
+                }
+            }
+        });
+
+        mPullToRefreshView.setOnRefreshListener(new PullToRefreshView.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                mPullToRefreshView.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        mPullToRefreshView.setRefreshing(false);
+                        Intent intent = new Intent(MainActivity.this, HeadImageActivity.class);
+                        intent.putExtra("headPicUrl", headPicUrl);
+                        startActivity(intent);
+                    }
+                }, 500);
+            }
+        });
+
+        boolean isNotification = sharedPreferences.getBoolean("isNotification", true);
+        if (isNotification) {
+            setNotification();
+        } else {
+            cancelNotification();
+        }
+
     }
 
     //设置底部弹窗按钮--------------------------开始----------------------------
@@ -413,13 +458,14 @@ public class MainActivity extends AppCompatActivity
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Glide.with(MainActivity.this).load(headPicUrl).into(head_image_view);
+                        Glide.with(MainActivity.this).load(headPicUrl).crossFade().into(head_image_view);
                     }
                 });
             }
         });
     }
 
+    //添加顶部通知栏
     private void setNotification() {
         Time time = new Time("GMT+8");
         time.setToNow();
@@ -427,10 +473,9 @@ public class MainActivity extends AppCompatActivity
         int month = time.month;
         int date = time.monthDay;
         String today = year + "-" + month + "-" + date;
-        Intent intent = new Intent(this, ModifyMemoryActivity.class);
+        Intent intent = new Intent(this, MemoryDayActivity.class);
         PendingIntent contextIntent = PendingIntent.getActivity(this, 0,
                 intent, 0);
-        NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         Notification notification = new NotificationCompat.Builder(MainActivity.this)
                 .setContentTitle(today)
                 .setContentText("记住今天重要的事情")
@@ -441,6 +486,11 @@ public class MainActivity extends AppCompatActivity
                 .build();
         notification.flags = Notification.FLAG_ONGOING_EVENT; // 设置常驻 Flag
         notificationManager.notify(1, notification);
+    }
+
+    //取消顶部常驻通知栏
+    private void cancelNotification() {
+        notificationManager.cancel(1);
     }
 
     @Override

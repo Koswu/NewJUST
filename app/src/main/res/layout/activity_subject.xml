@@ -13,7 +13,7 @@
         android:orientation="vertical">
 
         <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar"
+            android:id="@+id/subject_toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="@color/material_white_1000"
@@ -32,9 +32,11 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="200dp"
+            android:background="@color/material_white_1000"
             android:orientation="vertical">
 
             <TextView
+                android:background="@color/material_white_1000"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -43,6 +45,7 @@
                 android:textSize="22sp" />
 
             <TextView
+                android:background="@color/material_white_1000"
                 android:id="@+id/tv_all_point"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -54,9 +57,11 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@color/material_white_1000"
                 android:orientation="horizontal">
 
                 <TextView
+                    android:background="@color/material_white_1000"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -66,6 +71,7 @@
                     android:textSize="20sp" />
 
                 <TextView
+                    android:background="@color/material_white_1000"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -80,6 +86,7 @@
                 android:id="@+id/list_every_year_point"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@color/material_white_1000"
                 android:divider="@null">
 
             </ListView>

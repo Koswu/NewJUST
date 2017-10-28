@@ -13,6 +13,7 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.text.format.Time;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -59,13 +60,25 @@ public class MemoryDayActivity extends SwipeBackActivity {
 
     private SlidingLayout s;
 
+    private String[] colors = null;
+
+    private List<Integer> imageResources = new ArrayList<>();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_memory_day);
 
-        StatusBarCompat.setStatusBarColor(this, Color.rgb(0, 127, 193));
+        StatusBarCompat.setStatusBarColor(this, Color.rgb(255,255,255));
+
+        colors = this.getResources().getStringArray(R.array.color_arr);
+
+        for (int i = 0; i < colors.length; i++) {
+            imageResources.add(Color.parseColor(colors[i]));
+        }
+        Log.d(TAG, "onCreate: " + colors.length);
+        Log.d(TAG, "onCreate: " + imageResources.size());
 
         context = this;
         time.setToNow();
@@ -87,7 +100,7 @@ public class MemoryDayActivity extends SwipeBackActivity {
         }
 
         s = (SlidingLayout) findViewById(R.id.slideLayout);
-        s.setSlidingOffset(0.4f);
+        s.setSlidingOffset(0.6f);
 
         initData();
         initSwipeMenuList();
@@ -133,7 +146,7 @@ public class MemoryDayActivity extends SwipeBackActivity {
                         break;
 
                     case 1:
-                        Toast.makeText(context, "已删除:" + position, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context, "已删除", Toast.LENGTH_SHORT).show();
                         deleteItem(position);
                         memoryList.clear();
                         initData();
@@ -223,8 +236,9 @@ public class MemoryDayActivity extends SwipeBackActivity {
         String today = year + "年" + (month + 1) + "月" + date + "日";
         memoryList.clear();
         for (DBMemory dbMemory : dbMemoryList) {
+            int i = (int) (Math.random() * 150);
             String daysBetween = daysOfTwo_2(today, dbMemory.getMemory_day());
-            Memory memory = new Memory(dbMemory.getMemory_content(), daysBetween);
+            Memory memory = new Memory(dbMemory.getMemory_content(), daysBetween, imageResources.get(i));
             memoryList.add(memory);
         }
         Log.d(TAG, "initData: " + memoryList.size());
@@ -239,8 +253,9 @@ public class MemoryDayActivity extends SwipeBackActivity {
         dbMemoryList = DataSupport.findAll(DBMemory.class);
         Log.d(TAG, "initData: " + dbMemoryList.size());
         for (DBMemory dbMemory : dbMemoryList) {
+            int i = (int) (Math.random() * 150);
             String daysBetween = daysOfTwo_2(today, dbMemory.getMemory_day());
-            Memory memory = new Memory(dbMemory.getMemory_content(), daysBetween);
+            Memory memory = new Memory(dbMemory.getMemory_content(), daysBetween, imageResources.get(i));
             memoryList.add(memory);
         }
     }

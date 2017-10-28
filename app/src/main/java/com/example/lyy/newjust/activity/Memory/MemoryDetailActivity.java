@@ -96,7 +96,7 @@ public class MemoryDetailActivity extends SwipeBackActivity {
         bingPicImg = (ImageView) findViewById(R.id.bing_pic_img);
         String bingPic = sharedPreferences.getString("head_pic", null);
         if (bingPic != null) {
-            Glide.with(this).load(bingPic).diskCacheStrategy(DiskCacheStrategy.ALL).crossFade().into(bingPicImg);
+            Glide.with(this).load(bingPic).crossFade().into(bingPicImg);
         } else {
             loadBingPic();
         }

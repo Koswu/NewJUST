@@ -7,8 +7,11 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.ActionBar;
+import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -64,6 +67,8 @@ public class SubjectActivity extends SwipeBackActivity implements MaterialTabLis
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //去掉Activity上面的状态栏
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_subject);
 
         //设置状态栏和toolbar颜色一致
@@ -84,19 +89,6 @@ public class SubjectActivity extends SwipeBackActivity implements MaterialTabLis
         init();
     }
 
-
-    //将背景图和状态栏融合到一起
-    private void changeStatusBar() {
-        if (Build.VERSION.SDK_INT >= 21) {
-            View decorView = getWindow().getDecorView();
-            decorView.setSystemUiVisibility(
-                    View.SYSTEM_UI_FLAG_FULLSCREEN
-                            | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-            );
-            getWindow().setStatusBarColor(Color.TRANSPARENT);
-        }
-    }
-
     private void init() {
 
         adapter_list_kaoshi = new ArrayList<>();
@@ -105,13 +97,14 @@ public class SubjectActivity extends SwipeBackActivity implements MaterialTabLis
 
         tv_all_point = (TextView) findViewById(R.id.tv_all_point);
 
-//        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-//        setSupportActionBar(toolbar);
-//        ActionBar actionBar = getSupportActionBar();
-//        if (actionBar != null) {
-//            actionBar.setDisplayHomeAsUpEnabled(true);
-//            actionBar.setDisplayShowTitleEnabled(false);
-//        }
+        Toolbar subject_toolbar = (Toolbar) findViewById(R.id.subject_toolbar);
+        setSupportActionBar(subject_toolbar);
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setDisplayShowTitleEnabled(false);
+            actionBar.setHomeAsUpIndicator(R.drawable.ic_menu_back_blue);
+        }
 
         tabHost = (MaterialTabHost) findViewById(R.id.tabHost);
         pager = (ViewPager) findViewById(R.id.pager);
@@ -135,7 +128,6 @@ public class SubjectActivity extends SwipeBackActivity implements MaterialTabLis
                             .setTabListener(this)
             );
         }
-
     }
 
     private void searchPointRequest() {
@@ -335,12 +327,19 @@ public class SubjectActivity extends SwipeBackActivity implements MaterialTabLis
             }
             super.setPrimaryItem(container, position, object);
         }
-
-
         public FragmentLayout getCurrentFragment() {
             return mCurrentFragment;
         }
+    }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                break;
+        }
+        return true;
     }
 
     @Override

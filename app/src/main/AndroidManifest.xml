@@ -30,10 +30,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".activity.Subject.SubjectActivity" />
         <activity
-            android:name=".activity.Subject.SubjectActivity"
-            android:launchMode="singleTop" />
-        <activity android:name=".activity.HeadImageActivity" />
+            android:name=".activity.HeadImageActivity"
+            android:theme="@style/HeadImageTheme" />
         <activity android:name=".activity.ToDoActivity" />
         <activity android:name=".activity.Setting.SettingsActivity" />
         <activity android:name=".activity.Setting.ProfileActivity" />
@@ -46,6 +46,12 @@
         <activity android:name=".activity.WelcomeActivity" />
         <activity android:name=".activity.One.WeiBoActivity" />
         <activity android:name=".activity.One.OneActivity" />
+        <activity android:name=".activity.Setting.CropViewActivity" />
+        <activity android:name=".activity.One.PopupActivity" />
+        <activity android:name=".activity.Memory.MemoryDayActivity" />
+        <activity android:name=".activity.One.ConstellationActivity" />
+        <activity android:name=".activity.Memory.ModifyMemoryActivity" />
+        <activity android:name=".activity.Memory.MemoryDetailActivity"></activity>
 
         <provider
             android:name="android.support.v4.content.FileProvider"
@@ -57,8 +63,6 @@
                 android:resource="@xml/file_paths" />
         </provider>
 
-        <activity android:name=".activity.Setting.CropViewActivity" />
-
         <receiver android:name=".util.ToDoWidgetProvider">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
@@ -68,6 +72,7 @@
                 android:name="android.appwidget.provider"
                 android:resource="@xml/widget_info" />
         </receiver>
+
         <receiver
             android:name=".util.AlarmReceiver"
             android:process=":remote" />
@@ -76,16 +81,13 @@
             android:name=".service.ToDoListViewService"
             android:exported="false"
             android:permission="android.permission.BIND_REMOTEVIEWS" />
+
         <service
             android:name=".service.LongRunningService"
             android:enabled="true"
             android:exported="true" />
 
-        <activity android:name=".activity.One.PopupActivity" />
-        <activity android:name=".activity.Memory.MemoryDayActivity" />
-        <activity android:name=".activity.One.ConstellationActivity" />
-        <activity android:name=".activity.Memory.ModifyMemoryActivity" />
-        <activity android:name=".activity.Memory.MemoryDetailActivity"></activity>
+
     </application>
 
 </manifest>

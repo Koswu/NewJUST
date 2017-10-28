@@ -31,7 +31,7 @@ public class OneActivity extends SwipeBackActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_one);
 
-        StatusBarCompat.setStatusBarColor(this, Color.rgb(0, 127, 193));
+        StatusBarCompat.setStatusBarColor(this, Color.rgb(0, 172, 193));
 
         url = "http://120.25.88.41/oneDay/one/index.html";
 
@@ -60,7 +60,7 @@ public class OneActivity extends SwipeBackActivity {
         //设置转的圈的颜色
         mWaveSwipeRefreshLayout.setColorSchemeColors(Color.WHITE, Color.WHITE);
         //设置水波纹的颜色
-        mWaveSwipeRefreshLayout.setWaveColor(Color.rgb(0, 172, 193));
+        mWaveSwipeRefreshLayout.setWaveColor(Color.rgb(135,206,235));
         mWaveSwipeRefreshLayout.setOnRefreshListener(new WaveSwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
